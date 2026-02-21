@@ -1,0 +1,41 @@
+﻿generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  email     String   @unique
+  password  String
+  balance   Decimal  @default(0) @db.Decimal(10, 2)
+  isAdmin   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  reviews   Review[]
+}
+
+model Product {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String
+  description String   @db.Text
+  reward      Decimal  @db.Decimal(10, 2)
+  createdAt   DateTime @default(now())
+  reviews     Review[]
+}
+
+model Review {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  productId String   @db.Uuid
+  feedback  String   @db.Text
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@unique([userId, productId])
+}
+
