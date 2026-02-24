@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
@@ -121,6 +121,78 @@
         }
       }
 
+      .lever-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        min-width: 106px;
+        padding: 4px 6px 4px 12px;
+        border-radius: 9999px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        background: rgba(15, 23, 42, 0.55);
+        transition: transform 0.18s ease, border-color 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+      }
+
+      .lever-toggle:hover {
+        transform: translateY(-1px);
+      }
+
+      .lever-toggle:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .lever-toggle__text {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        color: rgba(148, 163, 184, 0.95);
+      }
+
+      .lever-toggle__track {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        width: 44px;
+        height: 24px;
+        padding: 2px;
+        border-radius: 9999px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        background: rgba(30, 41, 59, 0.9);
+        transition: border-color 0.2s ease, background 0.2s ease;
+      }
+
+      .lever-toggle__thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 9999px;
+        background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.55);
+        transform: translateX(0);
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+
+      .lever-toggle[data-state='on'] {
+        border-color: rgba(56, 189, 248, 0.5);
+        background: rgba(56, 189, 248, 0.12);
+      }
+
+      .lever-toggle[data-state='on'] .lever-toggle__text {
+        color: rgb(34 211 238 / 1);
+      }
+
+      .lever-toggle[data-state='on'] .lever-toggle__track {
+        border-color: rgba(94, 234, 212, 0.6);
+        background: rgba(34, 211, 238, 0.3);
+      }
+
+      .lever-toggle[data-state='on'] .lever-toggle__thumb {
+        transform: translateX(20px);
+        background: linear-gradient(135deg, #67e8f9, #06b6d4);
+      }
+
       .nav-item {
         transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
       }
@@ -231,6 +303,190 @@
         60% { transform: translateX(-3px); }
         80% { transform: translateX(3px); }
         100% { transform: translateX(0); }
+      }
+
+      #appView::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.45;
+        background-image:
+          radial-gradient(circle at 12% 18%, rgba(56, 189, 248, 0.2), transparent 38%),
+          radial-gradient(circle at 88% 78%, rgba(20, 184, 166, 0.2), transparent 42%),
+          linear-gradient(120deg, rgba(15, 23, 42, 0.7), rgba(11, 18, 32, 0.94));
+      }
+
+      .surface-card {
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+      }
+
+      .surface-card::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(120deg, transparent 18%, rgba(255, 255, 255, 0.09) 50%, transparent 82%);
+        transform: translateX(-120%);
+        transition: transform 0.48s ease;
+      }
+
+      .surface-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(94, 234, 212, 0.34);
+        box-shadow: 0 22px 52px -34px rgba(56, 189, 248, 0.65);
+      }
+
+      .surface-card:hover::after {
+        transform: translateX(120%);
+      }
+
+      .section-enter {
+        animation: sectionEnter 0.38s ease;
+      }
+
+      @keyframes sectionEnter {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .reveal-item {
+        opacity: 0;
+        transform: translateY(16px);
+        transition: opacity 0.44s ease, transform 0.44s ease;
+        transition-delay: var(--reveal-delay, 0ms);
+      }
+
+      .reveal-item.reveal-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .value-pop {
+        animation: valuePop 0.34s ease;
+      }
+
+      @keyframes valuePop {
+        0% {
+          opacity: 0.72;
+          transform: translateY(4px);
+        }
+        70% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      #reportCustomDateWrap {
+        align-items: end;
+      }
+
+      .robot-action {
+        position: relative;
+        border: 1px solid rgba(94, 234, 212, 0.4);
+        background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(20, 184, 166, 0.14));
+        color: #99f6e4;
+        box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4);
+        animation: robotPulse 2.2s ease-in-out infinite;
+      }
+
+      .robot-action:hover {
+        background: linear-gradient(135deg, rgba(56, 189, 248, 0.28), rgba(20, 184, 166, 0.22));
+        transform: translateY(-1px);
+      }
+
+      @keyframes robotPulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.35);
+        }
+        75% {
+          box-shadow: 0 0 0 10px rgba(56, 189, 248, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+        }
+      }
+
+      .support-chat-scroll {
+        max-height: 360px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(148, 163, 184, 0.45) transparent;
+      }
+
+      .support-chat-scroll::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .support-chat-scroll::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      .support-chat-scroll::-webkit-scrollbar-thumb {
+        background: rgba(148, 163, 184, 0.45);
+        border-radius: 999px;
+      }
+
+      .support-bubble {
+        border-radius: 16px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        padding: 10px 12px;
+        font-size: 0.82rem;
+        line-height: 1.4;
+      }
+
+      .support-bubble-user {
+        background: rgba(56, 189, 248, 0.12);
+        border-color: rgba(56, 189, 248, 0.35);
+        color: #e0f2fe;
+      }
+
+      .support-bubble-assistant {
+        background: rgba(15, 23, 42, 0.72);
+        border-color: rgba(148, 163, 184, 0.25);
+        color: rgba(226, 232, 240, 0.95);
+      }
+
+      .support-chip {
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        background: rgba(15, 23, 42, 0.55);
+        padding: 6px 10px;
+        font-size: 0.72rem;
+        color: rgba(226, 232, 240, 0.86);
+        transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+      }
+
+      .support-chip:hover {
+        border-color: rgba(94, 234, 212, 0.5);
+        background: rgba(56, 189, 248, 0.16);
+        transform: translateY(-1px);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+
+        .reveal-item {
+          opacity: 1 !important;
+          transform: none !important;
+        }
       }
     </style>
   </head>
@@ -369,19 +625,6 @@
             </button>
             <button
               type="button"
-              data-section-target="equipe"
-              class="nav-item flex items-center gap-3 rounded-xl px-3 py-2 text-white/60 transition hover:bg-white/5"
-            >
-              <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5">
-                <svg class="h-5 w-5 text-white/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M16 11a4 4 0 10-8 0 4 4 0 008 0z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 21a9 9 0 0118 0" />
-                </svg>
-              </span>
-              <span class="sidebar-text">Equipe</span>
-            </button>
-            <button
-              type="button"
               data-section-target="ferramentas"
               class="nav-item flex items-center gap-3 rounded-xl px-3 py-2 text-white/60 transition hover:bg-white/5"
             >
@@ -421,16 +664,17 @@
             </button>
             <button
               type="button"
-              data-section-target="videoaula"
+              data-section-target="informacao"
               class="nav-item flex items-center gap-3 rounded-xl px-3 py-2 text-white/60 transition hover:bg-white/5"
             >
               <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5">
                 <svg class="h-5 w-5 text-white/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 5h16a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V7a2 2 0 012-2z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 9l5 3-5 3V9z" />
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9h.01"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11 12h1v4h1"></path>
                 </svg>
               </span>
-              <span class="sidebar-text">Vídeo aula</span>
+              <span class="sidebar-text">Informação</span>
             </button>
             <button
               type="button"
@@ -456,8 +700,14 @@
             </div>
             <div class="flex flex-wrap items-center gap-3">
               <div class="plan-badge rounded-full border border-glow-500/40 bg-gradient-to-r from-glow-500/20 to-glow-600/20 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-glow-400">
-                Plano VIP BLACK
+                Plano vitalicio
               </div>
+              <a
+                href="https://reviewpay00.github.io/ReviewPay-vitalicio/"
+                class="plan-badge rounded-full border border-glow-500/40 bg-gradient-to-r from-glow-500/20 to-glow-600/20 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-glow-400"
+              >
+                Ver Planos
+              </a>
               <div class="rounded-2xl border border-white/10 bg-ink-900/70 px-4 py-2">
                 <div class="flex items-center justify-between gap-2">
                   <p class="text-xs text-white/60">Carteira</p>
@@ -859,7 +1109,7 @@
                       <p class="text-lg font-semibold" id="reportDailyAverage">R$ 0,00</p>
                     </div>
                   </div>
-                  <div class="mt-4 grid gap-3 md:grid-cols-[240px]">
+                  <div class="mt-4 grid gap-3 md:grid-cols-[240px_minmax(0,1fr)]">
                     <div class="grid gap-2">
                       <label class="text-xs text-white/50" for="reportRangeSelect">Periodo</label>
                       <select
@@ -870,7 +1120,27 @@
                         <option value="last7">Ultimos 7 dias</option>
                         <option value="last15">Ultimos 15 dias</option>
                         <option value="last30" selected>Ultimos 30 dias</option>
+                        <option value="custom">Periodo personalizado</option>
                       </select>
+                    </div>
+                    <div id="reportCustomDateWrap" class="hidden grid gap-3 md:grid-cols-3">
+                      <input
+                        id="reportCustomStartDate"
+                        class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-sm text-white"
+                        type="date"
+                      />
+                      <input
+                        id="reportCustomEndDate"
+                        class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-sm text-white"
+                        type="date"
+                      />
+                      <button
+                        id="reportCustomApply"
+                        class="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                        type="button"
+                      >
+                        Aplicar periodo
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -930,18 +1200,73 @@
                 <h3 class="text-xl font-semibold">Ferramentas da conta</h3>
                 <p class="mt-1 text-sm text-white/60">Configurações que deixam sua operação mais rápida.</p>
                 <div class="mt-4 space-y-3">
-                  <label class="flex items-center justify-between rounded-2xl border border-white/10 bg-ink-700/60 px-4 py-3 text-sm">
+                  <div class="flex items-center justify-between rounded-2xl border border-white/10 bg-ink-700/60 px-4 py-3 text-sm">
                     <span>Notificações internas</span>
-                    <input id="prefNotifications" type="checkbox" class="h-4 w-4 accent-glow-400" />
-                  </label>
-                  <label class="flex items-center justify-between rounded-2xl border border-white/10 bg-ink-700/60 px-4 py-3 text-sm">
+                    <button
+                      id="prefNotificationsToggle"
+                      type="button"
+                      class="lever-toggle"
+                      data-state="off"
+                      aria-pressed="false"
+                    >
+                      <span class="lever-toggle__text" data-switch-label>OFF</span>
+                      <span class="lever-toggle__track">
+                        <span class="lever-toggle__thumb"></span>
+                      </span>
+                    </button>
+                  </div>
+                  <div class="flex items-center justify-between rounded-2xl border border-white/10 bg-ink-700/60 px-4 py-3 text-sm">
                     <span>Resumo diário</span>
-                    <input id="prefSummary" type="checkbox" class="h-4 w-4 accent-glow-400" />
-                  </label>
-                  <label class="flex items-center justify-between rounded-2xl border border-white/10 bg-ink-700/60 px-4 py-3 text-sm">
+                    <button
+                      id="prefSummaryToggle"
+                      type="button"
+                      class="lever-toggle"
+                      data-state="off"
+                      aria-pressed="false"
+                    >
+                      <span class="lever-toggle__text" data-switch-label>OFF</span>
+                      <span class="lever-toggle__track">
+                        <span class="lever-toggle__thumb"></span>
+                      </span>
+                    </button>
+                  </div>
+                  <div class="flex items-center justify-between rounded-2xl border border-white/10 bg-ink-700/60 px-4 py-3 text-sm">
                     <span>Modo compacto</span>
-                    <input id="prefCompact" type="checkbox" class="h-4 w-4 accent-glow-400" />
-                  </label>
+                    <button
+                      id="prefCompactToggle"
+                      type="button"
+                      class="lever-toggle"
+                      data-state="off"
+                      aria-pressed="false"
+                    >
+                      <span class="lever-toggle__text" data-switch-label>OFF</span>
+                      <span class="lever-toggle__track">
+                        <span class="lever-toggle__thumb"></span>
+                      </span>
+                    </button>
+                  </div>
+                  <div class="rounded-2xl border border-white/10 bg-ink-700/60 px-4 py-3">
+                    <div class="flex items-center justify-between gap-3 text-sm">
+                      <div>
+                        <p>Auto IA nas avaliações</p>
+                        <p id="autoAiStatus" class="mt-1 text-[11px] text-white/50">Bloqueado até atingir R$ 1.000,00.</p>
+                      </div>
+                      <button
+                        id="autoAiToggleButton"
+                        type="button"
+                        class="lever-toggle"
+                        data-state="off"
+                        aria-pressed="false"
+                        disabled
+                      >
+                        <span class="lever-toggle__text" data-switch-label>OFF</span>
+                        <span class="lever-toggle__track">
+                          <span class="lever-toggle__thumb"></span>
+                        </span>
+                      </button>
+                    </div>
+                    <p id="autoAiProgress" class="mt-2 text-[11px] text-white/50"></p>
+                  </div>
                 </div>
               </div>
             </section>
@@ -962,12 +1287,36 @@
               </div>
             </section>
 
-            <section id="section-videoaula" data-section="videoaula" class="hidden space-y-6">
+            <section id="section-informacao" data-section="informacao" class="hidden space-y-6">
               <div class="rounded-3xl border border-white/10 bg-ink-800/70 p-6">
-                <h3 class="text-xl font-semibold">Vídeo aula</h3>
-                <p class="mt-1 text-sm text-white/60">Aprenda a operar o ReviewPay com eficiência.</p>
-                <div class="mt-4 rounded-2xl border border-white/10 bg-ink-700/60 p-6 text-sm text-white/70">
-                  Tutorial premium em preparação. Em breve você terá um passo a passo aqui.
+                <h3 class="text-xl font-semibold">Informação</h3>
+                <p class="mt-1 text-sm text-white/60">Entenda por que empresas e marketplaces pagam por avaliações qualificadas.</p>
+                <div class="mt-4 grid gap-4 text-sm text-white/70">
+                  <div class="rounded-2xl border border-white/10 bg-ink-700/60 p-5">
+                    <p>
+                      Marketplaces como Mercado Livre, Shopee, Amazon, Magazine Luiza, Shein e AliExpress dependem de confiança para vender.
+                      Quando um anúncio recebe avaliações consistentes e detalhadas, ele converte mais, reduz dúvidas e melhora o posicionamento.
+                    </p>
+                  </div>
+                  <div class="rounded-2xl border border-white/10 bg-ink-700/60 p-5">
+                    <p class="font-semibold text-white">Por que as empresas pagam:</p>
+                    <ul class="mt-2 grid gap-2 text-xs text-white/70">
+                      <li>1. Aumentar taxa de conversão em páginas de produto.</li>
+                      <li>2. Gerar prova social com feedback realista e útil.</li>
+                      <li>3. Identificar pontos de melhoria de qualidade e anúncio.</li>
+                      <li>4. Aumentar relevância dos produtos no algoritmo do marketplace.</li>
+                    </ul>
+                  </div>
+                  <div class="rounded-2xl border border-white/10 bg-ink-700/60 p-5">
+                    <p class="font-semibold text-white">Como isso vira ganho para você:</p>
+                    <p class="mt-2 text-xs text-white/70">
+                      Você executa avaliações seguindo critérios (nota, recomendação, qualidade, SKU e feedback). Após envio e aprovação,
+                      o valor entra como pagamento aprovado no seu painel financeiro.
+                    </p>
+                  </div>
+                  <div class="rounded-2xl border border-glow-500/30 bg-glow-500/10 p-5 text-xs text-glow-300">
+                    Dica operacional: avaliações claras, coerentes com o anúncio e sem inconsistências costumam ter maior taxa de aprovação.
+                  </div>
                 </div>
               </div>
             </section>
@@ -975,9 +1324,36 @@
             <section id="section-suporte" data-section="suporte" class="hidden space-y-6">
               <div class="rounded-3xl border border-white/10 bg-ink-800/70 p-6">
                 <h3 class="text-xl font-semibold">Suporte VIP BLACK</h3>
-                <p class="mt-1 text-sm text-white/60">Fale diretamente com nosso time premium.</p>
-                <div class="mt-4 rounded-2xl border border-white/10 bg-ink-700/60 p-6 text-sm text-white/70">
-                  Canal prioritário ativo. Resposta média em até 5 minutos úteis.
+                <p class="mt-1 text-sm text-white/60">Assistente inteligente para tirar dúvidas reais da plataforma.</p>
+                <div class="mt-4 rounded-2xl border border-white/10 bg-ink-700/60 p-4">
+                  <div class="flex flex-wrap items-center justify-between gap-3">
+                    <p class="text-xs text-white/50">Assistente Atlas IA</p>
+                    <p id="supportAssistantState" class="text-xs text-glow-400">Online e pronto para ajudar</p>
+                  </div>
+                  <div id="supportQuickTopics" class="mt-3 flex flex-wrap gap-2">
+                    <button type="button" class="support-chip" data-support-prompt="Como funciona aprovação de avaliações?">Aprovação</button>
+                    <button type="button" class="support-chip" data-support-prompt="Como conferir resultado de hoje?">Resultado hoje</button>
+                    <button type="button" class="support-chip" data-support-prompt="Como editar valor por data no admin?">Editar por data</button>
+                    <button type="button" class="support-chip" data-support-prompt="Como funciona o período personalizado?">Período personalizado</button>
+                    <button type="button" class="support-chip" data-support-prompt="Como sacar saldo com segurança?">Saque</button>
+                  </div>
+                  <ul id="supportChatList" class="support-chat-scroll mt-4 grid gap-3 text-sm"></ul>
+                  <form id="supportChatForm" class="mt-4 grid gap-3 md:grid-cols-[1fr_auto]">
+                    <input
+                      id="supportChatInput"
+                      class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-sm text-white placeholder:text-white/40"
+                      type="text"
+                      placeholder="Pergunte qualquer coisa sobre o ReviewPay..."
+                      autocomplete="off"
+                      required
+                    />
+                    <button
+                      class="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                      type="submit"
+                    >
+                      Perguntar
+                    </button>
+                  </form>
                 </div>
               </div>
             </section>
@@ -1013,6 +1389,21 @@
                 type="button"
               >
                 Fechar
+              </button>
+              <button
+                id="reviewOpenSupportAI"
+                class="robot-action inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold transition"
+                type="button"
+                title="Preencher avaliacao com IA"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" class="h-4 w-4">
+                  <rect x="6" y="8" width="12" height="10" rx="3"></rect>
+                  <path d="M12 4v3"></path>
+                  <circle cx="10" cy="12.5" r="1"></circle>
+                  <circle cx="14" cy="12.5" r="1"></circle>
+                  <path d="M9.5 15.5h5"></path>
+                </svg>
+                <span>Auto IA</span>
               </button>
             </div>
           </div>
@@ -1152,8 +1543,18 @@
         </div>
 
         <div class="mt-6 grid gap-6 md:grid-cols-[220px,1fr]">
-          <div class="flex h-56 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-ink-700/80 to-ink-900/80 text-3xl font-semibold text-white/70">
-            RP
+          <div class="relative h-56 overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-ink-700/80 to-ink-900/80">
+            <img
+              id="productAdImage"
+              class="h-full w-full object-cover opacity-0 transition duration-500"
+              src=""
+              alt="Imagem do produto"
+              loading="lazy"
+            />
+            <div id="productAdImageFallback" class="absolute inset-0 flex items-center justify-center text-3xl font-semibold text-white/70">
+              RP
+            </div>
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-900/55 via-transparent to-transparent"></div>
           </div>
           <div class="space-y-4">
             <div class="flex flex-wrap items-center gap-3 text-sm">
@@ -1253,6 +1654,19 @@
           </section>
 
           <section class="rounded-2xl border border-white/10 bg-ink-700/60 p-5">
+            <h4 class="text-base font-semibold">Auto IA (desbloqueio)</h4>
+            <p id="adminAutoAIStatus" class="mt-1 text-xs text-white/60">Sem status no momento.</p>
+            <button
+              id="adminAutoAIUnlockButton"
+              class="mt-4 w-full rounded-xl border border-glow-500/40 bg-glow-500/10 px-4 py-3 text-sm font-semibold text-glow-300 transition hover:bg-glow-500/20"
+              type="button"
+            >
+              Desbloquear Auto IA
+            </button>
+            <p id="adminAutoAIMessage" class="mt-3 text-xs text-white/60"></p>
+          </section>
+
+          <section class="rounded-2xl border border-white/10 bg-ink-700/60 p-5">
             <h4 class="text-base font-semibold">Adicionar avaliação</h4>
             <form id="adminReviewForm" class="mt-4 grid gap-3">
               <select
@@ -1319,24 +1733,44 @@
           </section>
 
           <section class="rounded-2xl border border-white/10 bg-ink-700/60 p-5">
-            <h4 class="text-base font-semibold">Resultado 30 dias</h4>
-            <p class="mt-1 text-xs text-white/60">Defina o total dos ultimos 30 dias. O sistema distribui automaticamente por dia.</p>
-            <p class="mt-2 text-xs text-white/50">Total atual: <span id="adminRollingValue">R$ 0,00</span></p>
+            <h4 class="text-base font-semibold">Distribuir por período</h4>
+            <p class="mt-1 text-xs text-white/60">
+              Informe o total dos últimos dias e o sistema distribui por data de forma previsível.
+            </p>
+            <p class="mt-2 text-xs text-white/50">Total manual (últimos 30 dias): <span id="adminRollingValue">R$ 0,00</span></p>
             <form id="adminRollingForm" class="mt-4 grid gap-3">
+              <input
+                id="adminRollingDays"
+                class="w-full rounded-xl border border-white/10 bg-ink-700 px-4 py-3 text-sm text-white"
+                type="number"
+                min="1"
+                max="365"
+                step="1"
+                value="30"
+                placeholder="Quantidade de dias"
+                required
+              />
               <input
                 id="adminRollingAmount"
                 class="w-full rounded-xl border border-white/10 bg-ink-700 px-4 py-3 text-sm text-white"
                 type="number"
                 min="0"
                 step="0.01"
-                placeholder="Total dos ultimos 30 dias (R$)"
+                placeholder="Valor total do período (R$)"
                 required
               />
+              <select
+                id="adminRollingMode"
+                class="w-full rounded-xl border border-white/10 bg-ink-700 px-4 py-3 text-sm text-white"
+              >
+                <option value="equal" selected>Linear (valor dividido por dia)</option>
+                <option value="weighted">Inteligente (prioriza dias com histórico)</option>
+              </select>
               <button
                 class="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
                 type="submit"
               >
-                Salvar total 30 dias
+                Aplicar no período
               </button>
             </form>
             <button
@@ -1344,9 +1778,69 @@
               class="mt-3 w-full rounded-xl border border-rose-400/40 bg-rose-500/10 px-4 py-2 text-xs font-semibold text-rose-200 transition hover:bg-rose-500/20"
               type="button"
             >
-              Remover ajuste
+              Limpar valores dos últimos dias
             </button>
             <p id="adminRollingMessage" class="mt-3 text-xs text-white/60"></p>
+          </section>
+
+          <section class="rounded-2xl border border-white/10 bg-ink-700/60 p-5">
+            <h4 class="text-base font-semibold">Resultado por dia</h4>
+            <p class="mt-1 text-xs text-white/60">Crie ou edite o valor do dia que você quiser.</p>
+            <form id="adminReportForm" class="mt-4 grid gap-3">
+              <input
+                id="adminReportDate"
+                class="w-full rounded-xl border border-white/10 bg-ink-700 px-4 py-3 text-sm text-white"
+                type="date"
+                required
+              />
+              <input
+                id="adminReportAmount"
+                class="w-full rounded-xl border border-white/10 bg-ink-700 px-4 py-3 text-sm text-white"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="Valor do dia (R$)"
+                required
+              />
+              <button
+                class="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                type="submit"
+              >
+                Salvar / atualizar dia
+              </button>
+            </form>
+            <p id="adminReportMessage" class="mt-3 text-xs text-white/60"></p>
+            <ul id="adminReportList" class="mt-4 grid gap-2 text-xs text-white/70"></ul>
+          </section>
+
+          <section class="rounded-2xl border border-white/10 bg-ink-700/60 p-5">
+            <h4 class="text-base font-semibold">Resultado por mês</h4>
+            <p class="mt-1 text-xs text-white/60">Defina metas mensais quando não houver granularidade diária.</p>
+            <form id="adminReportMonthForm" class="mt-4 grid gap-3">
+              <input
+                id="adminReportMonth"
+                class="w-full rounded-xl border border-white/10 bg-ink-700 px-4 py-3 text-sm text-white"
+                type="month"
+                required
+              />
+              <input
+                id="adminReportMonthAmount"
+                class="w-full rounded-xl border border-white/10 bg-ink-700 px-4 py-3 text-sm text-white"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="Valor do mês (R$)"
+                required
+              />
+              <button
+                class="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                type="submit"
+              >
+                Salvar / atualizar mês
+              </button>
+            </form>
+            <p id="adminReportMonthMessage" class="mt-3 text-xs text-white/60"></p>
+            <ul id="adminReportMonthList" class="mt-4 grid gap-2 text-xs text-white/70"></ul>
           </section>
 
           <section class="rounded-2xl border border-white/10 bg-ink-700/60 p-5">
@@ -1424,6 +1918,7 @@
       const adminClose = document.getElementById('adminClose');
       const reviewOverlay = document.getElementById('reviewOverlay');
       const reviewCancel = document.getElementById('reviewCancel');
+      const reviewOpenSupportAI = document.getElementById('reviewOpenSupportAI');
       const reviewSubmit = document.getElementById('reviewSubmit');
       const reviewFeedback = document.getElementById('reviewFeedback');
       const reviewProductInfo = document.getElementById('reviewProductInfo');
@@ -1440,6 +1935,8 @@
       const productAdDescription = document.getElementById('productAdDescription');
       const productAdSpecs = document.getElementById('productAdSpecs');
       const productAdPrice = document.getElementById('productAdPrice');
+      const productAdImage = document.getElementById('productAdImage');
+      const productAdImageFallback = document.getElementById('productAdImageFallback');
       const productAdExternal = document.getElementById('productAdExternal');
       const productAdClose = document.getElementById('productAdClose');
       const reviewRecommend = document.getElementById('reviewRecommend');
@@ -1447,9 +1944,12 @@
       const reviewTitle = document.getElementById('reviewTitle');
       const reviewSku = document.getElementById('reviewSku');
       const reviewRatingInputs = document.querySelectorAll('input[name="reviewRating"]');
-      const prefNotifications = document.getElementById('prefNotifications');
-      const prefSummary = document.getElementById('prefSummary');
-      const prefCompact = document.getElementById('prefCompact');
+      const prefNotificationsToggle = document.getElementById('prefNotificationsToggle');
+      const prefSummaryToggle = document.getElementById('prefSummaryToggle');
+      const prefCompactToggle = document.getElementById('prefCompactToggle');
+      const autoAiToggleButton = document.getElementById('autoAiToggleButton');
+      const autoAiStatus = document.getElementById('autoAiStatus');
+      const autoAiProgress = document.getElementById('autoAiProgress');
       const reviewList = document.getElementById('reviewList');
       const reviewListSecondary = document.getElementById('reviewListSecondary');
       const nextReviewInfo = document.getElementById('nextReviewInfo');
@@ -1496,6 +1996,11 @@
       const quickSync = document.getElementById('quickSync');
       const quickGenerate = document.getElementById('quickGenerate');
       const quickSummary = document.getElementById('quickSummary');
+      const supportChatList = document.getElementById('supportChatList');
+      const supportChatForm = document.getElementById('supportChatForm');
+      const supportChatInput = document.getElementById('supportChatInput');
+      const supportQuickTopics = document.getElementById('supportQuickTopics');
+      const supportAssistantState = document.getElementById('supportAssistantState');
       const toastContainer = document.getElementById('toastContainer');
       const reportAverageRating = document.getElementById('reportAverageRating');
       const reportApprovalRate = document.getElementById('reportApprovalRate');
@@ -1507,7 +2012,9 @@
       const reportDailyAverage = document.getElementById('reportDailyAverage');
       const reportRangeSelect = document.getElementById('reportRangeSelect');
       const reportCustomDateWrap = document.getElementById('reportCustomDateWrap');
-      const reportCustomDate = document.getElementById('reportCustomDate');
+      const reportCustomStartDate = document.getElementById('reportCustomStartDate');
+      const reportCustomEndDate = document.getElementById('reportCustomEndDate');
+      const reportCustomApply = document.getElementById('reportCustomApply');
       const reportRangeMessage = document.getElementById('reportRangeMessage');
       const reportChart = document.getElementById('reportChart');
       const reportChartLabel = document.getElementById('reportChartLabel');
@@ -1527,6 +2034,9 @@
       const adminClearMessage = document.getElementById('adminClearMessage');
       const adminResetAccount = document.getElementById('adminResetAccount');
       const adminResetMessage = document.getElementById('adminResetMessage');
+      const adminAutoAIUnlockButton = document.getElementById('adminAutoAIUnlockButton');
+      const adminAutoAIStatus = document.getElementById('adminAutoAIStatus');
+      const adminAutoAIMessage = document.getElementById('adminAutoAIMessage');
 
       const adminReviewForm = document.getElementById('adminReviewForm');
       const adminMarketplace = document.getElementById('adminMarketplace');
@@ -1539,7 +2049,9 @@
       const adminBonusMessage = document.getElementById('adminBonusMessage');
       const adminBonusValue = document.getElementById('adminBonusValue');
       const adminRollingForm = document.getElementById('adminRollingForm');
+      const adminRollingDays = document.getElementById('adminRollingDays');
       const adminRollingAmount = document.getElementById('adminRollingAmount');
+      const adminRollingMode = document.getElementById('adminRollingMode');
       const adminRollingMessage = document.getElementById('adminRollingMessage');
       const adminRollingValue = document.getElementById('adminRollingValue');
       const adminRollingClear = document.getElementById('adminRollingClear');
@@ -1614,8 +2126,14 @@
           return;
         }
         const text = String(value ?? '');
+        const previous = element.dataset.sensitiveValue;
         element.dataset.sensitiveValue = text;
         element.textContent = applyPrivacyText(text);
+        if (typeof previous === 'string' && previous !== text) {
+          element.classList.remove('value-pop');
+          void element.offsetWidth;
+          element.classList.add('value-pop');
+        }
       }
 
       function syncPrivacyVisibility() {
@@ -1702,8 +2220,10 @@
       const localAuthKey = 'local_auth_v1';
       const reviewIntervals = [3, 6, 9, 4, 7, 11];
       const reviewTTL = 20 * 60 * 1000;
+      const autoIAUnlockTarget = 1000;
       const navItems = document.querySelectorAll('[data-section-target]');
       const sections = document.querySelectorAll('[data-section]');
+      const productImageSearchCache = new Map();
       let currentUser = null;
       let accountState = null;
       let lastSevenPress = 0;
@@ -1711,6 +2231,8 @@
       let countdownTimer = null;
       let lastPendingReviewCount = 0;
       let lastZeroPress = 0;
+      let reportResizeTimer = null;
+      let revealObserver = null;
 
       function showAuth() {
         appView.classList.add('hidden');
@@ -1720,6 +2242,8 @@
       function showApp() {
         authView.classList.add('hidden');
         appView.classList.remove('hidden');
+        initializeSurfaceCards();
+        initializeRevealObserver();
         setActiveSection('dashboard');
       }
 
@@ -1730,6 +2254,11 @@
         sections.forEach((section) => {
           const isActive = section.dataset.section === sectionId;
           section.classList.toggle('hidden', !isActive);
+          if (isActive) {
+            section.classList.remove('section-enter');
+            void section.offsetWidth;
+            section.classList.add('section-enter');
+          }
         });
         navItems.forEach((item) => {
           const isActive = item.dataset.sectionTarget === sectionId;
@@ -1744,7 +2273,56 @@
 
         if (sectionId === 'relatorios') {
           updateReportSummary();
+        } else if (sectionId === 'suporte') {
+          initializeSupportAssistant();
         }
+      }
+
+      function initializeSurfaceCards() {
+        const targets = document.querySelectorAll(
+          '#appView section[data-section] > div, #appView section[data-section] > div > .grid > section'
+        );
+        targets.forEach((element, index) => {
+          if (element.dataset.surfaceReady === '1') {
+            return;
+          }
+          element.dataset.surfaceReady = '1';
+          element.classList.add('surface-card', 'reveal-item');
+          element.style.setProperty('--reveal-delay', `${Math.min(index * 35, 320)}ms`);
+        });
+      }
+
+      function initializeRevealObserver() {
+        const revealItems = document.querySelectorAll('.reveal-item');
+        if (revealItems.length === 0) {
+          return;
+        }
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          revealItems.forEach((item) => item.classList.add('reveal-visible'));
+          return;
+        }
+        if (revealObserver) {
+          revealObserver.disconnect();
+        }
+        revealObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) {
+                return;
+              }
+              entry.target.classList.add('reveal-visible');
+              revealObserver.unobserve(entry.target);
+            });
+          },
+          {
+            threshold: 0.12
+          }
+        );
+        revealItems.forEach((item) => {
+          if (!item.classList.contains('reveal-visible')) {
+            revealObserver.observe(item);
+          }
+        });
       }
 
       function setUserInfo(user) {
@@ -1752,6 +2330,7 @@
         const storageKey = `${accountStoragePrefix}${currentUser.id || 'default'}`;
         accountState = loadAccountState(storageKey);
         accountState.storageKey = storageKey;
+        migrateLegacyRollingSales();
         pruneExpiredReviews();
         seedInitialReviews();
         lastPendingReviewCount = accountState.reviews.filter((review) => review.status === 'pending').length;
@@ -1767,6 +2346,7 @@
         initAdminReportDate();
         initAdminReportMonth();
         initSalesReport();
+        initializeSupportAssistant(true);
         updateDashboardStats();
         renderActivities();
         renderTeamMembers();
@@ -1808,24 +2388,41 @@
         }
       }
 
-      function loadPreference(element, key, defaultValue) {
-        if (!element) {
-          return;
-        }
+      function loadPreferenceValue(key, defaultValue) {
         const stored = safeStorageGet(key);
         if (stored === null) {
-          element.checked = defaultValue;
-        } else {
-          element.checked = stored === 'true';
+          return defaultValue;
+        }
+        return stored === 'true';
+      }
+
+      function renderLeverToggle(button, enabled, disabled = false) {
+        if (!button) {
+          return;
+        }
+        button.dataset.state = enabled ? 'on' : 'off';
+        button.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+        button.disabled = Boolean(disabled);
+        const label = button.querySelector('[data-switch-label]');
+        if (label) {
+          label.textContent = enabled ? 'ON' : 'OFF';
         }
       }
 
-      function bindPreference(element, key) {
-        if (!element) {
+      function renderPreferenceToggle(button, enabled) {
+        renderLeverToggle(button, enabled, false);
+      }
+
+      function bindPreferenceToggle(button, key, defaultValue) {
+        if (!button) {
           return;
         }
-        element.addEventListener('change', () => {
-          safeStorageSet(key, element.checked ? 'true' : 'false');
+        let enabled = loadPreferenceValue(key, defaultValue);
+        renderPreferenceToggle(button, enabled);
+        button.addEventListener('click', () => {
+          enabled = !enabled;
+          safeStorageSet(key, enabled ? 'true' : 'false');
+          renderPreferenceToggle(button, enabled);
         });
       }
 
@@ -1942,6 +2539,8 @@
             { id: 'tm-1', name: 'Neto (Owner)', role: 'Administrador', status: 'ativo' },
             { id: 'tm-2', name: 'Equipe VIP', role: 'Operacao', status: 'ativo' }
           ],
+          autoAIEnabled: false,
+          autoAIAdminUnlocked: false,
           nextReviewAt: 0,
           reviewIntervalIndex: 0
         };
@@ -1996,7 +2595,9 @@
             lastManualSaleDate: parsed.lastManualSaleDate || null,
             marketplaces: Array.isArray(parsed.marketplaces) ? parsed.marketplaces : fallback.marketplaces,
             activities: Array.isArray(parsed.activities) ? parsed.activities : [],
-            teamMembers: Array.isArray(parsed.teamMembers) ? parsed.teamMembers : fallback.teamMembers
+            teamMembers: Array.isArray(parsed.teamMembers) ? parsed.teamMembers : fallback.teamMembers,
+            autoAIEnabled: parsed.autoAIEnabled === true,
+            autoAIAdminUnlocked: parsed.autoAIAdminUnlocked === true
           };
         } catch (error) {
           return { ...fallback };
@@ -2064,8 +2665,18 @@
         return currencyFormatter.format(Number.isNaN(numberValue) ? 0 : numberValue);
       }
 
+      function getLocalDateKey(date) {
+        if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+          return '';
+        }
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+
       function formatDateInput(date) {
-        return date.toISOString().slice(0, 10);
+        return getLocalDateKey(date);
       }
 
       function parseDateInput(value, isEnd = false) {
@@ -2076,7 +2687,7 @@
         if (!year || !month || !day) {
           return null;
         }
-        return new Date(year, month - 1, day, isEnd ? 23 : 0, isEnd ? 59 : 0, isEnd ? 59 : 0, 999);
+        return new Date(year, month - 1, day, isEnd ? 23 : 0, isEnd ? 59 : 0, isEnd ? 59 : 0, isEnd ? 999 : 0);
       }
 
       function formatMoney(value) {
@@ -2111,6 +2722,171 @@
         return new Date(year, month - 1, day, 0, 0, 0);
       }
 
+      function getDateRange(start, end) {
+        const range = [];
+        if (!(start instanceof Date) || Number.isNaN(start.getTime()) || !(end instanceof Date) || Number.isNaN(end.getTime())) {
+          return range;
+        }
+        const current = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 0, 0, 0, 0);
+        const limit = new Date(end.getFullYear(), end.getMonth(), end.getDate(), 0, 0, 0, 0);
+        while (current <= limit) {
+          range.push(new Date(current));
+          current.setDate(current.getDate() + 1);
+        }
+        return range;
+      }
+
+      function getApprovedSalesMapByDate(start, end) {
+        const map = new Map();
+        const sales = getApprovedSales();
+        sales.forEach((sale) => {
+          if (!sale?.date || sale.date < start || sale.date > end) {
+            return;
+          }
+          const key = getLocalDateKey(sale.date);
+          map.set(key, (map.get(key) || 0) + Number(sale.amount || 0));
+        });
+        return map;
+      }
+
+      function distributeTotalByDays(totalValue, dayCount, weights = null) {
+        const count = Number(dayCount || 0);
+        if (!Number.isFinite(count) || count <= 0) {
+          return [];
+        }
+        const totalCents = Math.max(0, Math.round(Number(totalValue || 0) * 100));
+        let cents = null;
+
+        if (Array.isArray(weights) && weights.length === count) {
+          const safeWeights = weights.map((value) => {
+            const numeric = Number(value || 0);
+            return Number.isFinite(numeric) && numeric > 0 ? numeric : 0;
+          });
+          const weightTotal = safeWeights.reduce((sum, value) => sum + value, 0);
+          if (weightTotal > 0) {
+            const raw = safeWeights.map((weight) => (weight / weightTotal) * totalCents);
+            cents = raw.map((value) => Math.floor(value));
+            let remainder = totalCents - cents.reduce((sum, value) => sum + value, 0);
+            if (remainder > 0) {
+              const order = raw
+                .map((value, index) => ({ index, fraction: value - Math.floor(value) }))
+                .sort((a, b) => (b.fraction === a.fraction ? a.index - b.index : b.fraction - a.fraction));
+              let cursor = 0;
+              while (remainder > 0) {
+                cents[order[cursor % order.length].index] += 1;
+                remainder -= 1;
+                cursor += 1;
+              }
+            }
+          }
+        }
+
+        if (!cents) {
+          const base = Math.floor(totalCents / count);
+          let remainder = totalCents - base * count;
+          cents = Array(count).fill(base);
+          let cursor = count - 1;
+          while (remainder > 0) {
+            cents[cursor] += 1;
+            remainder -= 1;
+            cursor -= 1;
+            if (cursor < 0) {
+              cursor = count - 1;
+            }
+          }
+        }
+
+        return cents.map((value) => roundCurrency(value / 100));
+      }
+
+      function applyManualSalesForRange(start, end, totalValue, mode = 'weighted') {
+        if (!accountState) {
+          return null;
+        }
+        const days = getDateRange(start, end);
+        if (days.length === 0) {
+          return null;
+        }
+        const keys = days.map((day) => getLocalDateKey(day));
+        const approvedMap = getApprovedSalesMapByDate(start, end);
+        const weights =
+          mode === 'weighted'
+            ? keys.map((key) => ((approvedMap.get(key) || 0) > 0 ? 2 : 1))
+            : null;
+        const distributedValues = distributeTotalByDays(totalValue, keys.length, weights);
+
+        if (!Array.isArray(accountState.manualSales)) {
+          accountState.manualSales = [];
+        }
+        const manualMap = new Map(accountState.manualSales.map((entry) => [entry.date, entry]));
+        keys.forEach((key, index) => {
+          manualMap.set(key, {
+            date: key,
+            value: roundCurrency(distributedValues[index] || 0),
+            updatedAt: new Date().toISOString()
+          });
+        });
+        accountState.manualSales = Array.from(manualMap.values());
+        accountState.manualRollingSales = null;
+        accountState.lastManualSaleDate = keys[keys.length - 1] || null;
+
+        return {
+          count: keys.length,
+          startKey: keys[0],
+          endKey: keys[keys.length - 1]
+        };
+      }
+
+      function applyManualSalesForLastDays(dayCount, totalValue, mode = 'weighted') {
+        const safeDays = Math.max(1, Math.min(365, Math.trunc(Number(dayCount || 0) || 0)));
+        const now = new Date();
+        const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+        const start = new Date(end);
+        start.setDate(end.getDate() - (safeDays - 1));
+        start.setHours(0, 0, 0, 0);
+        const applied = applyManualSalesForRange(start, end, totalValue, mode);
+        if (!applied) {
+          return null;
+        }
+        return {
+          ...applied,
+          days: safeDays
+        };
+      }
+
+      function clearManualSalesForRange(start, end) {
+        if (!accountState || !Array.isArray(accountState.manualSales)) {
+          return 0;
+        }
+        let removed = 0;
+        accountState.manualSales = accountState.manualSales.filter((entry) => {
+          const date = parseDateKey(entry?.date);
+          if (!date || date < start || date > end) {
+            return true;
+          }
+          removed += 1;
+          return false;
+        });
+        accountState.manualRollingSales = null;
+        const sorted = [...accountState.manualSales].sort((a, b) => (a.date < b.date ? 1 : -1));
+        accountState.lastManualSaleDate = sorted[0]?.date || null;
+        return removed;
+      }
+
+      function migrateLegacyRollingSales() {
+        if (!accountState || !accountState.manualRollingSales) {
+          return;
+        }
+        const hasManualDays = Array.isArray(accountState.manualSales) && accountState.manualSales.length > 0;
+        const hasManualMonths = Array.isArray(accountState.manualSalesMonths) && accountState.manualSalesMonths.length > 0;
+        const total = Number(accountState.manualRollingSales.total || 0);
+        if (!hasManualDays && !hasManualMonths && Number.isFinite(total) && total >= 0) {
+          applyManualSalesForLastDays(30, total, 'equal');
+        }
+        accountState.manualRollingSales = null;
+        saveAccountState();
+      }
+
       function getPendingWithdrawalTotal() {
         if (!accountState) {
           return 0;
@@ -2129,10 +2905,20 @@
         if (!accountState) {
           return [];
         }
+        const reviewMap = new Map(
+          (accountState.reviews || [])
+            .filter((review) => review && review.id)
+            .map((review) => [String(review.id), review])
+        );
+
         const approvedReviews = (accountState.balanceRequests || [])
           .filter((request) => request.status === 'aprovado' && request.source === 'review')
           .map((request) => {
-            const timestamp = request.approvedAt || request.createdAt || null;
+            const review = request.reviewId ? reviewMap.get(String(request.reviewId)) : null;
+            const reviewCompletedAt = review ? Number(review.completedAt || review.createdAt || 0) : 0;
+            const timestamp = Number.isFinite(reviewCompletedAt) && reviewCompletedAt > 0
+              ? reviewCompletedAt
+              : request.approvedAt || request.createdAt || null;
             return {
               amount: Number(request.amount || 0),
               date: timestamp ? new Date(timestamp) : null
@@ -2151,6 +2937,160 @@
           .filter((item) => item.date && !Number.isNaN(item.date.getTime()) && Number.isFinite(item.amount));
 
         return [...approvedReviews, ...walletCredits];
+      }
+
+      function getAutoIAApprovedTotal() {
+        if (!accountState) {
+          return 0;
+        }
+        const total = (accountState.balanceRequests || [])
+          .filter((request) => request && request.source === 'review' && request.status === 'aprovado')
+          .reduce((sum, request) => sum + Number(request.amount || 0), 0);
+        return roundCurrency(Number.isFinite(total) ? total : 0);
+      }
+
+      function getAutoIAUnlockState() {
+        const approvedTotal = getAutoIAApprovedTotal();
+        const unlockedByTarget = approvedTotal >= autoIAUnlockTarget;
+        const unlockedByAdmin = Boolean(accountState && accountState.autoAIAdminUnlocked);
+        const unlocked = unlockedByTarget || unlockedByAdmin;
+        const remaining = Math.max(0, roundCurrency(autoIAUnlockTarget - approvedTotal));
+        const displayApprovedTotal = unlocked ? Math.max(approvedTotal, autoIAUnlockTarget) : approvedTotal;
+        return {
+          approvedTotal,
+          displayApprovedTotal,
+          unlockedByTarget,
+          unlockedByAdmin,
+          unlocked,
+          remaining
+        };
+      }
+
+      function isAutoIAUnlocked() {
+        return getAutoIAUnlockState().unlocked;
+      }
+
+      function isAutoAIEnabled() {
+        return Boolean(accountState && accountState.autoAIEnabled && isAutoIAUnlocked());
+      }
+
+      function updateReviewAutoAIButtonState() {
+        if (!reviewOpenSupportAI) {
+          return;
+        }
+        const unlockState = getAutoIAUnlockState();
+        const unlocked = unlockState.unlocked;
+        const enabled = isAutoAIEnabled();
+        reviewOpenSupportAI.disabled = !enabled;
+        reviewOpenSupportAI.classList.toggle('opacity-50', !enabled);
+        reviewOpenSupportAI.classList.toggle('cursor-not-allowed', !enabled);
+
+        if (!accountState) {
+          reviewOpenSupportAI.title = 'Auto IA indisponível no momento.';
+          return;
+        }
+        if (!unlocked) {
+          reviewOpenSupportAI.title = applyPrivacyText(
+            `Auto IA bloqueado. Falta ${formatCurrency(unlockState.remaining)} para liberar.`
+          );
+          return;
+        }
+        if (!accountState.autoAIEnabled) {
+          reviewOpenSupportAI.title = 'Auto IA desativado em Ferramentas.';
+          return;
+        }
+        reviewOpenSupportAI.title = 'Preencher avaliacao com IA';
+      }
+
+      function renderAutoIAToolControl() {
+        if (!autoAiToggleButton || !autoAiStatus || !autoAiProgress) {
+          updateReviewAutoAIButtonState();
+          return;
+        }
+
+        if (!accountState) {
+          renderLeverToggle(autoAiToggleButton, false, true);
+          autoAiStatus.textContent = 'Entre na conta para gerenciar o Auto IA.';
+          autoAiStatus.className = 'mt-1 text-[11px] text-white/50';
+          autoAiProgress.textContent = '';
+          updateReviewAutoAIButtonState();
+          return;
+        }
+
+        if (typeof accountState.autoAIEnabled !== 'boolean') {
+          accountState.autoAIEnabled = false;
+        }
+        if (typeof accountState.autoAIAdminUnlocked !== 'boolean') {
+          accountState.autoAIAdminUnlocked = false;
+        }
+
+        const unlockState = getAutoIAUnlockState();
+        const unlocked = unlockState.unlocked;
+        if (!unlocked && accountState.autoAIEnabled) {
+          accountState.autoAIEnabled = false;
+          saveAccountState();
+        }
+
+        const active = unlocked ? Boolean(accountState.autoAIEnabled) : false;
+        renderLeverToggle(autoAiToggleButton, active, !unlocked);
+
+        if (unlocked) {
+          autoAiStatus.textContent = active
+            ? 'Auto IA ativo: preenchimento automático liberado.'
+            : 'Auto IA desativado: você pode ativar quando quiser.';
+          autoAiStatus.className = `mt-1 text-[11px] ${active ? 'text-emerald-300' : 'text-white/60'}`;
+          autoAiProgress.textContent = applyPrivacyText(
+            `Meta liberada com ${formatCurrency(unlockState.displayApprovedTotal)} aprovados.`
+          );
+        } else {
+          autoAiStatus.textContent = 'Bloqueado até completar R$ 1.000,00 em ganhos aprovados.';
+          autoAiStatus.className = 'mt-1 text-[11px] text-amber-300';
+          autoAiProgress.textContent = applyPrivacyText(
+            `Progresso: ${formatCurrency(unlockState.approvedTotal)} / ${formatCurrency(autoIAUnlockTarget)}. Falta ${formatCurrency(unlockState.remaining)}.`
+          );
+        }
+        autoAiProgress.className = 'mt-2 text-[11px] text-white/50';
+        updateReviewAutoAIButtonState();
+      }
+
+      function renderAdminAutoIAControl() {
+        if (!adminAutoAIUnlockButton || !adminAutoAIStatus || !adminAutoAIMessage) {
+          return;
+        }
+
+        if (!accountState) {
+          adminAutoAIUnlockButton.disabled = true;
+          adminAutoAIUnlockButton.textContent = 'Desbloquear Auto IA';
+          adminAutoAIStatus.textContent = 'Faça login para gerenciar este controle.';
+          adminAutoAIStatus.className = 'mt-1 text-xs text-white/60';
+          adminAutoAIMessage.textContent = '';
+          adminAutoAIMessage.className = 'mt-3 text-xs text-white/60';
+          return;
+        }
+
+        if (typeof accountState.autoAIAdminUnlocked !== 'boolean') {
+          accountState.autoAIAdminUnlocked = false;
+        }
+
+        const unlockState = getAutoIAUnlockState();
+        const adminUnlocked = unlockState.unlockedByAdmin;
+        adminAutoAIUnlockButton.disabled = false;
+        adminAutoAIUnlockButton.textContent = adminUnlocked ? 'Rebloquear Auto IA' : 'Desbloquear Auto IA';
+        adminAutoAIUnlockButton.className = adminUnlocked
+          ? 'mt-4 w-full rounded-xl border border-amber-400/40 bg-amber-500/10 px-4 py-3 text-sm font-semibold text-amber-200 transition hover:bg-amber-500/20'
+          : 'mt-4 w-full rounded-xl border border-glow-500/40 bg-glow-500/10 px-4 py-3 text-sm font-semibold text-glow-300 transition hover:bg-glow-500/20';
+
+        if (adminUnlocked || unlockState.unlockedByTarget) {
+          adminAutoAIStatus.textContent = applyPrivacyText(
+            `Meta dos R$ 1.000,00 concluida. Total aprovado: ${formatCurrency(unlockState.displayApprovedTotal)}.`
+          );
+          adminAutoAIStatus.className = 'mt-1 text-xs text-emerald-300';
+        } else {
+          adminAutoAIStatus.textContent = applyPrivacyText(
+            `Bloqueado por meta. Progresso: ${formatCurrency(unlockState.approvedTotal)} / ${formatCurrency(autoIAUnlockTarget)}.`
+          );
+          adminAutoAIStatus.className = 'mt-1 text-xs text-white/60';
+        }
       }
 
       function getManualSalesMap() {
@@ -2180,6 +3120,11 @@
 
       function getRollingOverride() {
         if (!accountState || !accountState.manualRollingSales) {
+          return null;
+        }
+        const hasManualDays = Array.isArray(accountState.manualSales) && accountState.manualSales.length > 0;
+        const hasManualMonths = Array.isArray(accountState.manualSalesMonths) && accountState.manualSalesMonths.length > 0;
+        if (hasManualDays || hasManualMonths) {
           return null;
         }
         const total = Number(accountState.manualRollingSales.total);
@@ -2222,7 +3167,7 @@
             if (date < start || date > end) {
               continue;
             }
-            const key = date.toISOString().slice(0, 10);
+            const key = getLocalDateKey(date);
             totals.set(key, dailyValue);
           }
         });
@@ -2257,7 +3202,7 @@
           if (sale.date < start || sale.date > end) {
             return;
           }
-          const key = sale.date.toISOString().slice(0, 10);
+          const key = getLocalDateKey(sale.date);
           totals.set(key, (totals.get(key) || 0) + sale.amount);
         });
 
@@ -2374,7 +3319,7 @@
         for (let i = 0; i < days; i += 1) {
           const current = new Date(start);
           current.setDate(start.getDate() + i);
-          const key = current.toISOString().slice(0, 10);
+          const key = getLocalDateKey(current);
           buckets.set(key, { date: current, value: 0 });
         }
 
@@ -2383,7 +3328,7 @@
           if (sale.date < start || sale.date > end) {
             return;
           }
-          const key = sale.date.toISOString().slice(0, 10);
+          const key = getLocalDateKey(sale.date);
           if (buckets.has(key)) {
             buckets.get(key).value += sale.amount;
           }
@@ -2503,6 +3448,13 @@
         ctx.shadowBlur = 0;
       }
 
+      function toggleReportCustomRange(showCustom) {
+        if (!reportCustomDateWrap) {
+          return;
+        }
+        reportCustomDateWrap.classList.toggle('hidden', !showCustom);
+      }
+
       function updateReportSummary() {
         if (!reportSalesValue || !reportDailyAverage || !reportRangeSelect) {
           return;
@@ -2511,10 +3463,13 @@
         const now = new Date();
         const endToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
         let start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+        let end = new Date(endToday);
         let days = 1;
         let rangeLabel = 'Hoje';
 
         const selection = reportRangeSelect.value || 'today';
+        const isCustom = selection === 'custom';
+        toggleReportCustomRange(isCustom);
 
         if (selection === 'last7') {
           start = new Date(endToday);
@@ -2534,9 +3489,28 @@
           start.setHours(0, 0, 0, 0);
           days = 30;
           rangeLabel = 'Ultimos 30 dias';
+        } else if (selection === 'custom') {
+          const customStart = parseDateInput(reportCustomStartDate?.value);
+          const customEnd = parseDateInput(reportCustomEndDate?.value, true);
+          if (!customStart || !customEnd || customStart > customEnd) {
+            setSensitiveValue(reportSalesValue, 'R$ 0,00');
+            setSensitiveValue(reportDailyAverage, 'R$ 0,00');
+            if (reportRangeMessage) {
+              reportRangeMessage.textContent = 'Periodo: selecione um intervalo personalizado valido.';
+            }
+            if (reportChartLabel) {
+              reportChartLabel.textContent = 'Periodo personalizado';
+            }
+            renderReportChart(1, endToday);
+            return;
+          }
+          start = customStart;
+          end = customEnd;
+          days = daysBetweenInclusive(start, end);
+          rangeLabel = `${start.toLocaleDateString('pt-BR')} ate ${end.toLocaleDateString('pt-BR')}`;
         }
 
-        const total = sumSalesBetween(start, endToday);
+        const total = sumSalesBetween(start, end);
         setSensitiveValue(reportSalesValue, formatCurrency(total));
         setSensitiveValue(reportDailyAverage, formatCurrency(total / days));
         if (reportRangeMessage) {
@@ -2545,16 +3519,20 @@
         if (reportChartLabel) {
           reportChartLabel.textContent = rangeLabel;
         }
-        renderReportChart(Math.min(days, 60), endToday);
+        renderReportChart(Math.min(days, 365), end);
       }
 
       function initReportDates() {
-        if (!reportCustomDate) {
+        if (!reportCustomStartDate || !reportCustomEndDate) {
           return;
         }
         const now = new Date();
-        if (!reportCustomDate.value) {
-          reportCustomDate.value = formatDateInput(now);
+        const startDefault = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6, 0, 0, 0, 0);
+        if (!reportCustomStartDate.value) {
+          reportCustomStartDate.value = formatDateInput(startDefault);
+        }
+        if (!reportCustomEndDate.value) {
+          reportCustomEndDate.value = formatDateInput(now);
         }
       }
 
@@ -2637,8 +3615,25 @@
           setSensitiveValue(adminBonusValue, formatCurrency(accountState.bonusBalance || 0));
         }
         if (adminRollingValue) {
-          const rollingTotal = accountState.manualRollingSales ? Number(accountState.manualRollingSales.total || 0) : 0;
-          setSensitiveValue(adminRollingValue, formatCurrency(rollingTotal));
+          const now = new Date();
+          const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+          const start = new Date(end);
+          start.setDate(end.getDate() - 29);
+          start.setHours(0, 0, 0, 0);
+          const manualMap = getManualSalesMap();
+          let manualLast30 = 0;
+          let manualCount = 0;
+          manualMap.forEach((value, key) => {
+            const date = parseDateKey(key);
+            if (!date || date < start || date > end) {
+              return;
+            }
+            manualLast30 += Number(value || 0);
+            manualCount += 1;
+          });
+          const fallbackRolling = accountState.manualRollingSales ? Number(accountState.manualRollingSales.total || 0) : 0;
+          const total = manualCount > 0 ? manualLast30 : fallbackRolling;
+          setSensitiveValue(adminRollingValue, formatCurrency(total));
         }
       }
 
@@ -3059,6 +4054,437 @@
         };
       }
 
+      function getProductInitials(productName) {
+        const parts = String(productName || 'RP')
+          .replace(/[^a-zA-Z0-9\s]/g, ' ')
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean);
+        if (parts.length === 0) {
+          return 'RP';
+        }
+        if (parts.length === 1) {
+          return parts[0].slice(0, 2).toUpperCase();
+        }
+        return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+      }
+
+      function buildProductSvgDataUrl(review, meta) {
+        const safeName = String(review?.productName || 'Produto').slice(0, 28);
+        const safeMarketplace = String(review?.marketplaceName || 'Marketplace').slice(0, 22);
+        const safeCategory = String(meta?.category || 'Categoria').slice(0, 22);
+        const initials = getProductInitials(safeName);
+        const colorSeed = hashString(`${safeName}-${safeMarketplace}-${meta?.sku || ''}`);
+        const hueA = colorSeed % 360;
+        const hueB = (hueA + 48) % 360;
+        const svg = `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+            <defs>
+              <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="hsl(${hueA}, 78%, 26%)" />
+                <stop offset="100%" stop-color="hsl(${hueB}, 74%, 16%)" />
+              </linearGradient>
+            </defs>
+            <rect width="640" height="640" fill="url(#bg)" />
+            <circle cx="520" cy="120" r="120" fill="rgba(255,255,255,0.08)" />
+            <circle cx="110" cy="540" r="140" fill="rgba(255,255,255,0.07)" />
+            <text x="50%" y="48%" dominant-baseline="middle" text-anchor="middle" fill="rgba(255,255,255,0.92)" font-family="Arial, sans-serif" font-size="138" font-weight="700">${initials}</text>
+            <text x="50%" y="76%" dominant-baseline="middle" text-anchor="middle" fill="rgba(255,255,255,0.90)" font-family="Arial, sans-serif" font-size="36" font-weight="600">${safeName}</text>
+            <text x="50%" y="84%" dominant-baseline="middle" text-anchor="middle" fill="rgba(255,255,255,0.78)" font-family="Arial, sans-serif" font-size="26">${safeMarketplace} • ${safeCategory}</text>
+          </svg>
+        `;
+        return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+      }
+
+      function normalizeProductText(value) {
+        return String(value || '')
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, ' ')
+          .replace(/[^a-z0-9\s]/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
+      function getProductTokens(value) {
+        const stopWords = new Set([
+          'de',
+          'da',
+          'do',
+          'das',
+          'dos',
+          'com',
+          'para',
+          'sem',
+          'em',
+          'no',
+          'na',
+          'novo',
+          'nova',
+          'plus',
+          'pro',
+          'max',
+          'ultra',
+          'kit',
+          'pack',
+          'modelo'
+        ]);
+        return normalizeProductText(value)
+          .split(' ')
+          .filter((token) => token.length >= 3 && !stopWords.has(token));
+      }
+
+      function detectProductImageProfile(productName, category) {
+        const text = normalizeProductText(`${productName} ${category || ''}`);
+        const profiles = [
+          {
+            key: 'tv',
+            regex: /\b(tv|televisao|smart tv|oled|qled|monitor)\b/,
+            tags: ['television', 'monitor'],
+            keywords: ['television', 'tv', 'monitor', 'screen'],
+            queryHints: ['television product photo', 'smart tv']
+          },
+          {
+            key: 'phone',
+            regex: /\b(celular|smartphone|iphone|android|galaxy|redmi|motorola)\b/,
+            tags: ['smartphone', 'mobile'],
+            keywords: ['smartphone', 'phone', 'mobile'],
+            queryHints: ['smartphone product photo', 'mobile phone']
+          },
+          {
+            key: 'notebook',
+            regex: /\b(notebook|laptop|macbook|ultrabook|computador)\b/,
+            tags: ['laptop', 'notebook'],
+            keywords: ['laptop', 'notebook', 'computer'],
+            queryHints: ['laptop product photo', 'notebook computer']
+          },
+          {
+            key: 'headphone',
+            regex: /\b(fone|headphone|earbud|airpods|auricular)\b/,
+            tags: ['headphones', 'earbuds'],
+            keywords: ['headphones', 'earbuds', 'headset'],
+            queryHints: ['headphones product photo', 'wireless earbuds']
+          },
+          {
+            key: 'watch',
+            regex: /\b(relogio|smartwatch|watch|pulseira)\b/,
+            tags: ['watch', 'smartwatch'],
+            keywords: ['watch', 'smartwatch', 'wristwatch'],
+            queryHints: ['watch product photo', 'smartwatch']
+          },
+          {
+            key: 'fan',
+            regex: /\b(ventilador|fan|climatizador|ar condicionado)\b/,
+            tags: ['fan', 'home-appliance'],
+            keywords: ['fan', 'cooling', 'appliance'],
+            queryHints: ['fan appliance product photo', 'home fan']
+          },
+          {
+            key: 'kitchen',
+            regex: /\b(microondas|geladeira|fogao|forno|liquidificador|batedeira|cafeteira|air fryer)\b/,
+            tags: ['kitchen', 'appliance'],
+            keywords: ['kitchen', 'appliance', 'cooking'],
+            queryHints: ['kitchen appliance product photo', 'home appliance']
+          },
+          {
+            key: 'vacuum',
+            regex: /\b(aspirador|vacuum|robo aspirador)\b/,
+            tags: ['vacuum', 'appliance'],
+            keywords: ['vacuum', 'cleaner', 'appliance'],
+            queryHints: ['vacuum cleaner product photo', 'home vacuum']
+          },
+          {
+            key: 'fashion',
+            regex: /\b(tenis|sapato|camiseta|calca|vestido|jaqueta|bolsa|mochila)\b/,
+            tags: ['fashion', 'clothing'],
+            keywords: ['fashion', 'clothing', 'apparel'],
+            queryHints: ['fashion product photo', 'clothing product']
+          },
+          {
+            key: 'beauty',
+            regex: /\b(perfume|maquiagem|cosmetico|skincare|shampoo)\b/,
+            tags: ['beauty', 'cosmetics'],
+            keywords: ['beauty', 'cosmetics', 'skincare'],
+            queryHints: ['beauty product photo', 'cosmetics']
+          },
+          {
+            key: 'gaming',
+            regex: /\b(console|playstation|xbox|controle|gamer|teclado|mouse)\b/,
+            tags: ['gaming', 'console'],
+            keywords: ['gaming', 'console', 'controller'],
+            queryHints: ['gaming product photo', 'game console']
+          }
+        ];
+        const matched = profiles.find((profile) => profile.regex.test(text));
+        if (matched) {
+          return matched;
+        }
+        return {
+          key: 'product',
+          tags: ['product', 'ecommerce'],
+          keywords: ['product', 'ecommerce'],
+          queryHints: ['ecommerce product photo']
+        };
+      }
+
+      function uniqueValues(values) {
+        return values.filter((value, index, arr) => value && arr.indexOf(value) === index);
+      }
+
+      function buildProductThemeKeywords(review, meta, profile) {
+        const fromName = getProductTokens(review.productName);
+        const fromCategory = getProductTokens(meta.category || '');
+        const fromProfile = Array.isArray(profile?.keywords) ? profile.keywords : [];
+        return uniqueValues([...fromName, ...fromCategory, ...fromProfile].map((item) => normalizeProductText(item)));
+      }
+
+      function buildProductImageQueries(review, meta, profile) {
+        const productName = String(review?.productName || '').trim();
+        const categoryName = String(meta?.category || '').trim();
+        const queryHints = Array.isArray(profile?.queryHints) && profile.queryHints.length > 0 ? profile.queryHints : ['product photo'];
+        const primaryHint = String(queryHints[0] || 'product photo').trim();
+        const secondaryHint = String(queryHints[1] || primaryHint).trim();
+        const baseQueries = [
+          `${productName} ${primaryHint}`,
+          `${productName} ${categoryName} produto`,
+          `${secondaryHint} product isolated`,
+          `${primaryHint} ecommerce`
+        ];
+        return baseQueries
+          .map((query) => query.replace(/\s+/g, ' ').trim())
+          .filter((query, index, arr) => query && arr.indexOf(query) === index);
+      }
+
+      function scoreImageCandidate(text, themeKeywords) {
+        const normalized = normalizeProductText(text);
+        if (!normalized) {
+          return 0;
+        }
+        const penaltyRegex = /\b(logo|icon|icone|vector|illustration|wallpaper|banner|flag|map)\b/;
+        let score = penaltyRegex.test(normalized) ? -8 : 0;
+        const tokenSet = new Set(normalized.split(' ').filter(Boolean));
+
+        themeKeywords.forEach((keyword) => {
+          const keywordTokens = normalizeProductText(keyword).split(' ').filter(Boolean);
+          if (keywordTokens.length === 0) {
+            return;
+          }
+          const fullMatch = keywordTokens.every((token) => tokenSet.has(token));
+          if (fullMatch) {
+            score += keywordTokens.length >= 2 ? 7 : 4;
+          } else {
+            const partialHits = keywordTokens.filter((token) => tokenSet.has(token)).length;
+            score += partialHits;
+          }
+        });
+
+        return score;
+      }
+
+      function sanitizeWikiText(value) {
+        return String(value || '')
+          .replace(/<[^>]*>/g, ' ')
+          .replace(/&nbsp;/g, ' ')
+          .replace(/&amp;/g, '&')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
+      async function searchWikimediaCommons(query, themeKeywords) {
+        const params = new URLSearchParams({
+          action: 'query',
+          generator: 'search',
+          gsrsearch: query,
+          gsrnamespace: '6',
+          gsrlimit: '12',
+          prop: 'imageinfo',
+          iiprop: 'url|mime|size|extmetadata',
+          iiurlwidth: '960',
+          format: 'json',
+          origin: '*'
+        });
+        const endpoint = `https://commons.wikimedia.org/w/api.php?${params.toString()}`;
+        const response = await fetch(endpoint);
+        if (!response.ok) {
+          return [];
+        }
+        const data = await response.json();
+        const pages = Object.values(data?.query?.pages || {});
+        return pages
+          .map((page) => {
+            const info = Array.isArray(page.imageinfo) ? page.imageinfo[0] : null;
+            if (!info) {
+              return null;
+            }
+            const mime = String(info.mime || '').toLowerCase();
+            if (!mime.startsWith('image/')) {
+              return null;
+            }
+            const imageUrl = String(info.thumburl || info.url || '');
+            if (!imageUrl) {
+              return null;
+            }
+            const title = String(page.title || '').replace(/^File:/i, '').trim();
+            const description = sanitizeWikiText(info?.extmetadata?.ImageDescription?.value || '');
+            const score = scoreImageCandidate(`${title} ${description}`, themeKeywords);
+            if (score < 1) {
+              return null;
+            }
+            return {
+              url: imageUrl,
+              score,
+              title
+            };
+          })
+          .filter(Boolean);
+      }
+
+      async function searchWikipediaThumbnails(query, themeKeywords) {
+        const params = new URLSearchParams({
+          action: 'query',
+          generator: 'search',
+          gsrsearch: query,
+          gsrlimit: '10',
+          prop: 'pageimages|pageterms',
+          piprop: 'thumbnail',
+          pithumbsize: '960',
+          format: 'json',
+          origin: '*'
+        });
+        const endpoint = `https://pt.wikipedia.org/w/api.php?${params.toString()}`;
+        const response = await fetch(endpoint);
+        if (!response.ok) {
+          return [];
+        }
+        const data = await response.json();
+        const pages = Object.values(data?.query?.pages || {});
+        return pages
+          .map((page) => {
+            const imageUrl = String(page?.thumbnail?.source || '');
+            if (!imageUrl) {
+              return null;
+            }
+            const description = Array.isArray(page?.terms?.description) ? page.terms.description.join(' ') : '';
+            const title = String(page?.title || '');
+            const score = scoreImageCandidate(`${title} ${description}`, themeKeywords);
+            if (score < 1) {
+              return null;
+            }
+            return {
+              url: imageUrl,
+              score,
+              title
+            };
+          })
+          .filter(Boolean);
+      }
+
+      async function getProductImageCandidates(review, meta) {
+        const cacheKey = `${review.productName}|${meta.category || ''}|${meta.sku || ''}`;
+        if (productImageSearchCache.has(cacheKey)) {
+          return productImageSearchCache.get(cacheKey);
+        }
+
+        const profile = detectProductImageProfile(review.productName, meta.category);
+        const queries = buildProductImageQueries(review, meta, profile);
+        const themeKeywords = buildProductThemeKeywords(review, meta, profile);
+        const querySubset = queries.slice(0, 3);
+        const searchTasks = querySubset.flatMap((query) => [
+          searchWikimediaCommons(query, themeKeywords),
+          searchWikipediaThumbnails(query, themeKeywords)
+        ]);
+
+        const settled = await Promise.allSettled(searchTasks);
+        const mergedCandidates = [];
+        settled.forEach((result) => {
+          if (result.status === 'fulfilled' && Array.isArray(result.value)) {
+            mergedCandidates.push(...result.value);
+          }
+        });
+
+        const dedupedByUrl = new Map();
+        mergedCandidates.forEach((candidate) => {
+          if (!candidate || !candidate.url) {
+            return;
+          }
+          const existing = dedupedByUrl.get(candidate.url);
+          if (!existing || candidate.score > existing.score) {
+            dedupedByUrl.set(candidate.url, candidate);
+          }
+        });
+
+        const rankedUrls = Array.from(dedupedByUrl.values())
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 8)
+          .map((item) => item.url);
+
+        const finalCandidates = uniqueValues([...rankedUrls, buildProductSvgDataUrl(review, meta)]);
+        productImageSearchCache.set(cacheKey, finalCandidates);
+        return finalCandidates;
+      }
+
+      async function setProductAdImage(review, meta) {
+        if (!productAdImage) {
+          return;
+        }
+
+        const fallbackText = getProductInitials(review.productName);
+        if (productAdImageFallback) {
+          productAdImageFallback.textContent = fallbackText;
+          productAdImageFallback.classList.remove('hidden');
+        }
+        productAdImage.classList.add('opacity-0');
+        productAdImage.alt = `Imagem de ${review.productName}`;
+        productAdImage.referrerPolicy = 'no-referrer';
+        productAdImage.onload = null;
+        productAdImage.onerror = null;
+
+        const requestId = `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
+        productAdImage.dataset.requestId = requestId;
+        let candidates = [buildProductSvgDataUrl(review, meta)];
+
+        try {
+          candidates = await getProductImageCandidates(review, meta);
+        } catch (error) {
+          console.warn('Falha ao buscar imagem inteligente do produto:', error);
+        }
+        if (productAdImage.dataset.requestId !== requestId) {
+          return;
+        }
+
+        let index = 0;
+
+        const applyCandidate = () => {
+          if (index >= candidates.length) {
+            if (productAdImageFallback) {
+              productAdImageFallback.classList.remove('hidden');
+            }
+            return;
+          }
+          productAdImage.src = candidates[index];
+        };
+
+        productAdImage.onload = () => {
+          if (productAdImage.dataset.requestId !== requestId) {
+            return;
+          }
+          productAdImage.classList.remove('opacity-0');
+          if (productAdImageFallback) {
+            productAdImageFallback.classList.add('hidden');
+          }
+        };
+
+        productAdImage.onerror = () => {
+          if (productAdImage.dataset.requestId !== requestId) {
+            return;
+          }
+          index += 1;
+          applyCandidate();
+        };
+
+        applyCandidate();
+      }
+
       function openProductOverlay(review) {
         if (!productOverlay) {
           return;
@@ -3077,6 +4503,7 @@
             productAdSpecs.innerHTML = specs.map((spec) => `<li>${applyPrivacyText(spec)}</li>`).join('');
           }
         }
+        setProductAdImage(review, meta);
         setSensitiveValue(productAdPrice, formatCurrency(meta.price));
         productOverlay.classList.remove('hidden');
         productOverlay.classList.add('flex');
@@ -3085,6 +4512,15 @@
       function closeProductOverlay() {
         if (!productOverlay) {
           return;
+        }
+        if (productAdImage) {
+          productAdImage.onload = null;
+          productAdImage.onerror = null;
+          productAdImage.dataset.requestId = '';
+          productAdImage.classList.add('opacity-0');
+        }
+        if (productAdImageFallback) {
+          productAdImageFallback.classList.remove('hidden');
         }
         productOverlay.classList.add('hidden');
         productOverlay.classList.remove('flex');
@@ -3201,6 +4637,7 @@
           `${review.marketplaceName} · ${review.productName} · ${formatCurrency(review.reward)}`
         );
         resetReviewForm();
+        updateReviewAutoAIButtonState();
         reviewOverlay.classList.remove('hidden');
         reviewOverlay.classList.add('flex');
       }
@@ -3232,6 +4669,181 @@
         }
       }
 
+      function getReviewAutoFillData(review) {
+        const productName = String(review?.productName || 'Produto');
+        const marketplaceName = String(review?.marketplaceName || 'Marketplace');
+        const meta = review.productMeta || getProductMeta(productName, marketplaceName);
+        const combinedText = `${productName} ${String(meta.category || '')}`.toLowerCase();
+        const rewardValue = Number(review.reward || 0);
+
+        let rating = 5;
+        if (/cabo|case|pelicula|adaptador|suporte|acessorio/.test(combinedText)) {
+          rating = 4;
+        }
+        if (/basico|entrada|economico/.test(combinedText)) {
+          rating = Math.min(rating, 4);
+        }
+        if (/usado|recondicionado|open box/.test(combinedText)) {
+          rating = Math.min(rating, 3);
+        }
+        if (/defeito|quebrado|falha|fragil/.test(combinedText)) {
+          rating = 2;
+        }
+        if (Number.isFinite(rewardValue) && rewardValue < 5 && rating > 4) {
+          rating = 4;
+        }
+
+        const qualityByRating = {
+          5: 'excelente',
+          4: 'boa',
+          3: 'regular',
+          2: 'ruim',
+          1: 'ruim'
+        };
+        const quality = qualityByRating[rating] || 'boa';
+        const recommend = rating >= 4 ? 'sim' : 'nao';
+
+        const introOptions = [
+          `Analisando o anuncio de ${productName} no ${marketplaceName}, os dados principais estao completos.`,
+          `${productName} no ${marketplaceName} apresenta informacoes claras para validar a compra.`,
+          `Revisei o anuncio de ${productName} e o cadastro esta consistente no ${marketplaceName}.`
+        ];
+        const intro = introOptions[hashString(`${review.id}-intro`) % introOptions.length];
+
+        const priceValue = Number(meta.price || 0);
+        const priceLine = Number.isFinite(priceValue) && priceValue > 0
+          ? `Faixa de preco informada: ${formatCurrency(priceValue)}.`
+          : 'Faixa de preco dentro do padrao para o produto.';
+
+        const specs = Array.isArray(meta.specs) ? meta.specs.filter(Boolean).slice(0, 2) : [];
+        const specsLine = specs.length > 0
+          ? `Pontos vistos no anuncio: ${specs.join(' | ')}.`
+          : 'O anuncio traz descricao e especificacoes minimas para avaliacao.';
+
+        const qualityLineByKey = {
+          excelente: 'A percepcao geral e de qualidade alta, com bom acabamento e confianca no anuncio.',
+          boa: 'A qualidade aparenta ser boa e adequada para uso do dia a dia.',
+          regular: 'A qualidade parece regular, atende o basico mas sem destaque.',
+          ruim: 'A qualidade aparenta ser fraca e precisa de mais validacao antes da compra.'
+        };
+        const qualityLine = qualityLineByKey[quality] || qualityLineByKey.boa;
+        const recommendationLine = recommend === 'sim'
+          ? 'Recomendaria para quem busca custo-beneficio dentro dessa categoria.'
+          : 'Nao recomendaria no momento, pois o custo-beneficio nao parece ideal.';
+
+        const feedback = [intro, priceLine, specsLine, qualityLine, recommendationLine].join(' ');
+
+        return {
+          rating,
+          recommend,
+          quality,
+          title: productName,
+          sku: String(meta.sku || ''),
+          feedback
+        };
+      }
+
+      function getSelectableValues(selectElement) {
+        if (!selectElement) {
+          return [];
+        }
+        return Array.from(selectElement.options || [])
+          .map((option) => String(option.value || '').trim())
+          .filter((value) => value.length > 0);
+      }
+
+      function normalizeOptionValue(value) {
+        return String(value || '')
+          .trim()
+          .toLowerCase();
+      }
+
+      function pickVariableValue(availableValues, rankedValues) {
+        const available = Array.isArray(availableValues) ? availableValues.filter(Boolean) : [];
+        if (available.length === 0) {
+          return '';
+        }
+        const normalizedAvailableMap = new Map(
+          available.map((value) => [normalizeOptionValue(value), value])
+        );
+        const rankedNormalized = (Array.isArray(rankedValues) ? rankedValues : [])
+          .map((value) => normalizeOptionValue(value))
+          .filter(
+            (value, index, arr) => value && arr.indexOf(value) === index && normalizedAvailableMap.has(value)
+          );
+        const ranked = rankedNormalized.map((value) => normalizedAvailableMap.get(value));
+        const pool = ranked.length > 0 ? ranked : available;
+        const topWindow = Math.min(3, pool.length);
+        const pickIndex = Math.floor(Math.random() * topWindow);
+        return pool[pickIndex] || pool[0];
+      }
+
+      function getQualityCandidatesByRating(rating, fallbackQuality) {
+        const normalizedRating = Number.isFinite(rating) ? rating : 4;
+        if (normalizedRating >= 5) {
+          return [fallbackQuality, 'excelente', 'boa', 'regular'];
+        }
+        if (normalizedRating === 4) {
+          return [fallbackQuality, 'boa', 'excelente', 'regular'];
+        }
+        if (normalizedRating === 3) {
+          return [fallbackQuality, 'regular', 'boa', 'ruim'];
+        }
+        return [fallbackQuality, 'ruim', 'regular', 'boa'];
+      }
+
+      function autoFillReviewForm(review) {
+        if (!review) {
+          return;
+        }
+        const autoData = getReviewAutoFillData(review);
+        const availableRatingValues = Array.from(reviewRatingInputs)
+          .map((input) => Number(input.value))
+          .filter((value) => Number.isFinite(value));
+        const preferredRatings = [
+          autoData.rating,
+          autoData.rating - 1,
+          autoData.rating + 1,
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+          .filter((value, index, arr) => Number.isFinite(value) && value >= 1 && value <= 5 && arr.indexOf(value) === index)
+          .map(String);
+        const selectedRating = pickVariableValue(
+          availableRatingValues.map(String),
+          preferredRatings
+        );
+
+        reviewRatingInputs.forEach((input) => {
+          input.checked = input.value === selectedRating;
+        });
+
+        const normalizedSelectedRating = Number(selectedRating || autoData.rating || 4);
+
+        const availableRecommendValues = getSelectableValues(reviewRecommend);
+        const recommendRanking =
+          normalizedSelectedRating >= 4
+            ? [autoData.recommend, 'sim', 'nao']
+            : [autoData.recommend, 'nao', 'sim'];
+        const selectedRecommend = pickVariableValue(availableRecommendValues, recommendRanking);
+        reviewRecommend.value = selectedRecommend || availableRecommendValues[0] || '';
+
+        const availableQualityValues = getSelectableValues(reviewQuality);
+        const qualityRanking = getQualityCandidatesByRating(normalizedSelectedRating, autoData.quality);
+        const selectedQuality = pickVariableValue(availableQualityValues, qualityRanking);
+        reviewQuality.value = selectedQuality || availableQualityValues[0] || '';
+
+        reviewTitle.value = autoData.title;
+        if (reviewSku) {
+          reviewSku.value = autoData.sku;
+        }
+        reviewFeedback.value = autoData.feedback;
+        reviewMessage.textContent = 'Avaliacao preenchida com variacao inteligente nas opcoes disponiveis.';
+        reviewMessage.className = 'mt-3 text-xs text-cyan-300';
+      }
       function renderAdminReviews() {
         if (!accountState) {
           return;
@@ -3279,7 +4891,10 @@
                     <p class="text-sm font-semibold">${label}</p>
                     <p class="text-xs text-white/60">${applyPrivacyText(formatCurrency(entry.value))}</p>
                   </div>
-                  <button data-admin-report-remove="${entry.date}" class="text-xs text-rose-300 hover:text-rose-200">Remover</button>
+                  <div class="flex items-center gap-3">
+                    <button data-admin-report-edit="${entry.date}" class="text-xs text-sky-200 hover:text-sky-100">Editar</button>
+                    <button data-admin-report-remove="${entry.date}" class="text-xs text-rose-300 hover:text-rose-200">Remover</button>
+                  </div>
                 </div>
               </li>
             `;
@@ -3345,7 +4960,12 @@
 
             const label = applyPrivacyText(request.label);
             const amount = applyPrivacyText(formatCurrency(request.amount));
-            const originText = request.source === 'review' ? 'Origem: avaliação pendente' : '';
+            const originText =
+              request.source === 'review'
+                ? request.status === 'pendente'
+                  ? 'Origem: avaliação aguardando aprovação'
+                  : 'Origem: avaliação aprovada'
+                : '';
             return `
               <li class="rounded-xl border border-white/10 bg-ink-800/70 p-3">
                 <div class="flex items-center justify-between gap-3">
@@ -3368,6 +4988,7 @@
         renderRequestList(accountState?.balanceRequests || [], balanceRequestList, 'Sem solicitações de saldo.');
         renderRequestList(accountState?.withdrawalRequests || [], withdrawalRequestList, 'Sem solicitações de saque.');
         renderFinanceLists();
+        renderAdminAutoIAControl();
         renderTeamMembers();
         updateDashboardStats();
       }
@@ -3377,11 +4998,133 @@
           return;
         }
         if (financeBalanceRequestList) {
-          renderRequestList(accountState.balanceRequests || [], financeBalanceRequestList, 'Sem pagamentos pendentes.', false);
+          const pendingReviews = (accountState.balanceRequests || []).filter((request) => request.status === 'pendente');
+          renderRequestList(pendingReviews, financeBalanceRequestList, 'Sem pagamentos pendentes.', false);
         }
         if (financeWithdrawalList) {
           renderRequestList(accountState.withdrawalRequests || [], financeWithdrawalList, 'Sem solicitações de saque.', false);
         }
+      }
+
+      function setSupportAssistantStatus(text) {
+        if (!supportAssistantState) {
+          return;
+        }
+        supportAssistantState.textContent = text;
+      }
+
+      function appendSupportMessage(role, text) {
+        if (!supportChatList) {
+          return;
+        }
+        const safeText = String(text || '').trim();
+        if (!safeText) {
+          return;
+        }
+        const item = document.createElement('li');
+        item.className = role === 'user' ? 'grid justify-items-end gap-1' : 'grid justify-items-start gap-1';
+
+        const tag = document.createElement('span');
+        tag.className = role === 'user' ? 'text-[10px] text-sky-200/80' : 'text-[10px] text-glow-400/90';
+        tag.textContent = role === 'user' ? 'Você' : 'Atlas IA';
+
+        const bubble = document.createElement('div');
+        bubble.className = `support-bubble ${role === 'user' ? 'support-bubble-user ml-8' : 'support-bubble-assistant mr-8'}`;
+        bubble.textContent = applyPrivacyText(safeText);
+
+        item.appendChild(tag);
+        item.appendChild(bubble);
+        supportChatList.appendChild(item);
+        supportChatList.scrollTop = supportChatList.scrollHeight;
+      }
+
+      function getSupportSnapshot() {
+        const now = new Date();
+        const startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+        const endToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+        const requests = accountState?.balanceRequests || [];
+        const reviewRequests = requests.filter((request) => request.source === 'review');
+        const approvedToday = sumSalesBetween(startToday, endToday);
+        const pendingValue = reviewRequests
+          .filter((request) => request.status === 'pendente')
+          .reduce((sum, request) => sum + Number(request.amount || 0), 0);
+        const pendingCount = reviewRequests.filter((request) => request.status === 'pendente').length;
+        const approvedCount = reviewRequests.filter((request) => request.status === 'aprovado').length;
+        return {
+          approvedToday,
+          pendingValue,
+          pendingCount,
+          approvedCount,
+          balance: Number(accountState?.balance || 0)
+        };
+      }
+
+      function generateSupportReply(question) {
+        const text = String(question || '').trim();
+        const lower = text.toLowerCase();
+        const snapshot = getSupportSnapshot();
+        const hasData = Boolean(accountState);
+
+        if (!hasData) {
+          return 'Faça login para eu te responder com os dados reais da sua conta, sem chute.';
+        }
+
+        if (/(mentir|enganar|inventar|falso)/.test(lower)) {
+          return 'Eu te ajudo com orientação real da plataforma. Informação correta acelera resultado e evita erro operacional.';
+        }
+
+        if (/(aprova|pendent|avali)/.test(lower)) {
+          return `Fluxo correto: você envia a avaliação, ela vira pagamento pendente, e só entra no saldo após aprovação. Agora existem ${snapshot.pendingCount} pendente(s), somando ${formatCurrency(snapshot.pendingValue)}.`;
+        }
+
+        if (/(saldo|carteira|principal)/.test(lower)) {
+          return `Seu saldo principal atual é ${formatCurrency(snapshot.balance)}. O que ainda não foi aprovado fica separado como pendente (${formatCurrency(snapshot.pendingValue)}).`;
+        }
+
+        if (/(hoje|dia|resultado|periodo|período|relatorio|relatório|7 dias|15 dias|30 dias|personalizado)/.test(lower)) {
+          return `No relatório, "Hoje" mostra apenas o que já foi aprovado hoje: ${formatCurrency(snapshot.approvedToday)}. Para comparar intervalos, use Relatórios -> Período personalizado com data início e fim.`;
+        }
+
+        if (/(admin|editar|data|manual|distribuir)/.test(lower)) {
+          return 'No Admin você pode: 1) editar valor por dia, 2) ajustar por mês, 3) distribuir um total nos últimos X dias. Esse ajuste impacta os gráficos e filtros de período.';
+        }
+
+        if (/(saque|pix)/.test(lower)) {
+          return 'Para saque: vá em Financeiro -> Solicitar saque, informe valor e chave PIX. O saque só sai do saldo após aprovação.';
+        }
+
+        if (/(marketplace|integra|conectar|sincron)/.test(lower)) {
+          return 'Em Integrações você conecta/desconecta marketplaces. Depois use "Sincronizar marketplaces agora" para atualizar status e operação.';
+        }
+
+        if (/(privacidade|ocultar|mostrar|olho)/.test(lower)) {
+          return 'Use o botão de olho no topo da carteira para ocultar ou mostrar valores sensíveis em toda a interface.';
+        }
+
+        return 'Posso te ajudar com: aprovações, saldo, resultado por período, edição no admin, saques e integrações. Me fala seu objetivo e eu te passo o caminho mais rápido.';
+      }
+
+      function initializeSupportAssistant(force = false) {
+        if (!supportChatList) {
+          return;
+        }
+        if (!force && supportChatList.dataset.ready === '1') {
+          return;
+        }
+        supportChatList.dataset.ready = '1';
+        supportChatList.innerHTML = '';
+        appendSupportMessage(
+          'assistant',
+          'Sou o Atlas IA. Posso te guiar com respostas diretas sobre saldo, aprovações, relatórios e configurações do ReviewPay.'
+        );
+        const snapshot = getSupportSnapshot();
+        if (accountState) {
+          appendSupportMessage(
+            'assistant',
+            `Resumo atual: saldo ${formatCurrency(snapshot.balance)}, pendente ${formatCurrency(snapshot.pendingValue)} e aprovado hoje ${formatCurrency(snapshot.approvedToday)}.`
+          );
+        }
+        setSupportAssistantStatus('Online e pronto para ajudar');
       }
 
       function formatRelativeTime(value) {
@@ -3633,6 +5376,8 @@
 
       function updateDashboardStats() {
         if (!accountState) {
+          renderAdminAutoIAControl();
+          renderAutoIAToolControl();
           return;
         }
         const now = Date.now();
@@ -3717,6 +5462,8 @@
         renderAlerts();
         updateSalesReport();
         updateReportSummary();
+        renderAdminAutoIAControl();
+        renderAutoIAToolControl();
       }
 
       function startCountdownTimer() {
@@ -3870,8 +5617,66 @@
         });
       }
 
+      if (reportCustomApply) {
+        reportCustomApply.addEventListener('click', () => {
+          if (reportRangeSelect) {
+            reportRangeSelect.value = 'custom';
+          }
+          updateReportSummary();
+        });
+      }
+
+      [reportCustomStartDate, reportCustomEndDate].forEach((input) => {
+        if (!input) {
+          return;
+        }
+        input.addEventListener('change', () => {
+          if (reportRangeSelect) {
+            reportRangeSelect.value = 'custom';
+          }
+        });
+      });
+
+      if (supportQuickTopics) {
+        supportQuickTopics.addEventListener('click', (event) => {
+          const button = event.target.closest('[data-support-prompt]');
+          if (!button || !supportChatInput) {
+            return;
+          }
+          const prompt = button.getAttribute('data-support-prompt') || '';
+          supportChatInput.value = prompt;
+          supportChatInput.focus();
+        });
+      }
+
+      if (supportChatForm) {
+        supportChatForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          if (!supportChatInput) {
+            return;
+          }
+          const question = supportChatInput.value.trim();
+          if (!question) {
+            return;
+          }
+          appendSupportMessage('user', question);
+          supportChatInput.value = '';
+          setSupportAssistantStatus('Analisando sua dúvida...');
+          setTimeout(() => {
+            const response = generateSupportReply(question);
+            appendSupportMessage('assistant', response);
+            setSupportAssistantStatus('Online e pronto para ajudar');
+          }, 180);
+        });
+      }
+
       window.addEventListener('resize', () => {
-        updateReportSummary();
+        if (reportResizeTimer) {
+          clearTimeout(reportResizeTimer);
+        }
+        reportResizeTimer = setTimeout(() => {
+          updateReportSummary();
+        }, 140);
       });
 
       adminBalanceForm.addEventListener('submit', async (event) => {
@@ -3945,6 +5750,13 @@
             return;
           }
 
+          const days = Number.parseInt(adminRollingDays?.value || '0', 10);
+          if (!Number.isFinite(days) || days < 1 || days > 365) {
+            adminRollingMessage.textContent = 'Informe uma quantidade de dias entre 1 e 365.';
+            adminRollingMessage.classList.add('text-rose-300');
+            return;
+          }
+
           const amount = parseAmountAllowZero(adminRollingAmount?.value);
           if (amount === null) {
             adminRollingMessage.textContent = 'Informe um valor valido.';
@@ -3952,24 +5764,31 @@
             return;
           }
 
-          accountState.manualRollingSales = {
-            total: roundCurrency(amount),
-            updatedAt: new Date().toISOString()
-          };
-          accountState.manualSales = [];
-          accountState.manualSalesMonths = [];
-          accountState.lastManualSaleDate = null;
+          const mode = adminRollingMode?.value === 'weighted' ? 'weighted' : 'equal';
+          const applied = applyManualSalesForLastDays(days, amount, mode);
+          if (!applied) {
+            adminRollingMessage.textContent = 'Nao foi possivel aplicar o periodo.';
+            adminRollingMessage.classList.add('text-rose-300');
+            return;
+          }
 
           saveAccountState();
+          renderAdminReportList();
           updateWalletBalance();
           updateSalesReport();
           if (reportRangeSelect) {
-            reportRangeSelect.value = 'last30';
+            reportRangeSelect.value = 'custom';
+          }
+          if (reportCustomStartDate) {
+            reportCustomStartDate.value = applied.startKey;
+          }
+          if (reportCustomEndDate) {
+            reportCustomEndDate.value = applied.endKey;
           }
           updateReportSummary();
-          addActivity(`Total 30 dias ajustado para ${formatCurrency(amount)}.`);
+          addActivity(`Distribuicao aplicada: ${formatCurrency(amount)} em ${days} dias (${mode === 'weighted' ? 'inteligente' : 'linear'}).`);
 
-          adminRollingMessage.textContent = 'Total 30 dias atualizado.';
+          adminRollingMessage.textContent = `Distribuicao aplicada de ${applied.startKey} ate ${applied.endKey}.`;
           adminRollingMessage.classList.add('text-emerald-300');
           if (adminRollingAmount) {
             adminRollingAmount.value = '';
@@ -3982,16 +5801,39 @@
           if (!accountState) {
             return;
           }
-          const confirmed = window.confirm('Remover o ajuste dos ultimos 30 dias?');
+          const days = Number.parseInt(adminRollingDays?.value || '0', 10);
+          if (!Number.isFinite(days) || days < 1 || days > 365) {
+            adminRollingMessage.textContent = 'Informe uma quantidade de dias valida para limpar.';
+            adminRollingMessage.className = 'mt-3 text-xs text-rose-300';
+            return;
+          }
+          const confirmed = window.confirm(`Remover valores manuais dos ultimos ${days} dias?`);
           if (!confirmed) {
             return;
           }
-          accountState.manualRollingSales = null;
+          const now = new Date();
+          const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+          const start = new Date(end);
+          start.setDate(end.getDate() - (days - 1));
+          start.setHours(0, 0, 0, 0);
+          const removed = clearManualSalesForRange(start, end);
           saveAccountState();
+          renderAdminReportList();
           updateWalletBalance();
           updateSalesReport();
+          if (reportRangeSelect) {
+            reportRangeSelect.value = 'custom';
+          }
+          if (reportCustomStartDate) {
+            reportCustomStartDate.value = formatDateInput(start);
+          }
+          if (reportCustomEndDate) {
+            reportCustomEndDate.value = formatDateInput(end);
+          }
           updateReportSummary();
-          adminRollingMessage.textContent = 'Ajuste removido com sucesso.';
+          adminRollingMessage.textContent = removed > 0
+            ? `${removed} dia(s) manual(is) removido(s).`
+            : 'Nao havia valores manuais nesse periodo.';
           adminRollingMessage.classList.add('text-emerald-300');
         });
       }
@@ -4044,8 +5886,11 @@
           if (reportRangeSelect) {
             reportRangeSelect.value = 'custom';
           }
-          if (reportCustomDate) {
-            reportCustomDate.value = dateValue;
+          if (reportCustomStartDate) {
+            reportCustomStartDate.value = dateValue;
+          }
+          if (reportCustomEndDate) {
+            reportCustomEndDate.value = dateValue;
           }
           updateReportSummary();
           addActivity(`Resultado do dia ${dateValue} ajustado para ${formatCurrency(entry.value)}.`);
@@ -4136,6 +5981,27 @@
 
       if (adminReportList) {
         adminReportList.addEventListener('click', (event) => {
+          const editTarget = event.target.closest('[data-admin-report-edit]');
+          if (editTarget && accountState) {
+            const dateValue = editTarget.getAttribute('data-admin-report-edit');
+            const entry = (accountState.manualSales || []).find((item) => item.date === dateValue);
+            if (!entry) {
+              return;
+            }
+            if (adminReportDate) {
+              adminReportDate.value = dateValue;
+            }
+            if (adminReportAmount) {
+              adminReportAmount.value = formatMoney(entry.value);
+              adminReportAmount.focus();
+            }
+            if (adminReportMessage) {
+              adminReportMessage.textContent = `Editando ${dateValue}. Clique em salvar para atualizar.`;
+              adminReportMessage.className = 'mt-3 text-xs text-sky-300';
+            }
+            return;
+          }
+
           const target = event.target.closest('[data-admin-report-remove]');
           if (!target || !accountState) {
             return;
@@ -4193,6 +6059,7 @@
           updateDashboardStats();
           renderActivities();
           renderTeamMembers();
+          initializeSupportAssistant(true);
           adminResetMessage.textContent = 'Conta resetada com sucesso.';
           adminResetMessage.className = 'mt-3 text-xs text-emerald-300';
           showToast({
@@ -4200,6 +6067,38 @@
             message: 'Todos os dados da conta foram apagados.',
             type: 'warning'
           });
+        });
+      }
+
+      if (adminAutoAIUnlockButton) {
+        adminAutoAIUnlockButton.addEventListener('click', () => {
+          if (!accountState) {
+            return;
+          }
+          const nextAdminUnlock = !Boolean(accountState.autoAIAdminUnlocked);
+          accountState.autoAIAdminUnlocked = nextAdminUnlock;
+
+          const unlockStateAfter = getAutoIAUnlockState();
+          if (!nextAdminUnlock && !unlockStateAfter.unlockedByTarget) {
+            accountState.autoAIEnabled = false;
+          }
+
+          saveAccountState();
+          renderAdminAutoIAControl();
+          renderAutoIAToolControl();
+
+          if (adminAutoAIMessage) {
+            if (nextAdminUnlock) {
+              adminAutoAIMessage.textContent = 'Auto IA liberado. Meta dos R$ 1.000,00 concluida.';
+              adminAutoAIMessage.className = 'mt-3 text-xs text-emerald-300';
+            } else if (unlockStateAfter.unlockedByTarget) {
+              adminAutoAIMessage.textContent = 'Auto IA segue liberado: meta dos R$ 1.000,00 concluida.';
+              adminAutoAIMessage.className = 'mt-3 text-xs text-emerald-300';
+            } else {
+              adminAutoAIMessage.textContent = 'Auto IA bloqueado até atingir a meta dos R$ 1.000,00.';
+              adminAutoAIMessage.className = 'mt-3 text-xs text-amber-300';
+            }
+          }
         });
       }
 
@@ -4463,6 +6362,32 @@
 
       reviewCancel.addEventListener('click', closeReviewOverlay);
 
+      if (reviewOpenSupportAI) {
+        reviewOpenSupportAI.addEventListener('click', () => {
+          if (!accountState || !activeReviewId) {
+            return;
+          }
+          if (!isAutoAIEnabled()) {
+            if (!isAutoIAUnlocked()) {
+              const remaining = Math.max(0, roundCurrency(autoIAUnlockTarget - getAutoIAApprovedTotal()));
+              reviewMessage.textContent = applyPrivacyText(
+                `Auto IA bloqueado. Falta ${formatCurrency(remaining)} para liberar nas Ferramentas.`
+              );
+            } else {
+              reviewMessage.textContent = 'Auto IA está desativado. Ative em Ferramentas para usar.';
+            }
+            reviewMessage.className = 'mt-3 text-xs text-amber-300';
+            return;
+          }
+          const currentReview = accountState.reviews.find((item) => item.id === activeReviewId);
+          if (!currentReview) {
+            return;
+          }
+          autoFillReviewForm(currentReview);
+          reviewFeedback.focus();
+          reviewFeedback.setSelectionRange(reviewFeedback.value.length, reviewFeedback.value.length);
+        });
+      }
       if (reviewOpenProduct) {
         reviewOpenProduct.addEventListener('click', () => {
           if (!activeReviewId || !accountState) {
@@ -4568,6 +6493,9 @@
 
         const review = accountState.reviews[reviewIndex];
         const bonusIncrement = calculateBonusByQuality(quality);
+        const completedAt = Date.now();
+        const rewardAmountRaw = Number(review.reward || 0);
+        const rewardAmount = Number.isFinite(rewardAmountRaw) && rewardAmountRaw > 0 ? roundCurrency(rewardAmountRaw) : 0;
         accountState.reviews[reviewIndex] = {
           ...review,
           status: 'submitted',
@@ -4580,21 +6508,26 @@
             note: feedback
           },
           bonusEarned: bonusIncrement,
-          completedAt: Date.now()
+          completedAt,
+          approvedAt: null,
+          rejectedAt: null
         };
         accountState.bonusBalance = roundCurrency((accountState.bonusBalance || 0) + bonusIncrement);
         recordBonusEarned(bonusIncrement, 'review', 'Bônus VIP', review.id);
-        const rewardAmount = Number(review.reward || 0);
         const approvalRequest = {
           id: `review-${review.id}`,
           label: `Avaliação: ${review.marketplaceName} · ${review.productName}`,
-          amount: rewardAmount.toFixed(2),
+          amount: formatMoney(rewardAmount),
           status: 'pendente',
           source: 'review',
           reviewId: review.id,
-          createdAt: Date.now()
+          createdAt: completedAt,
+          approvedAt: null
         };
-        accountState.balanceRequests = [approvalRequest, ...(accountState.balanceRequests || [])];
+        accountState.balanceRequests = [
+          approvalRequest,
+          ...(accountState.balanceRequests || []).filter((request) => request.id !== approvalRequest.id)
+        ];
         saveAccountState();
         updateWalletBalance();
         renderReviewList();
@@ -4604,7 +6537,7 @@
         renderFinanceLists();
         addActivity(`Avaliação enviada: ${review.marketplaceName} · ${review.productName}. Aguardando aprovação.`);
         reviewMessage.textContent = applyPrivacyText(
-          `Avaliação enviada! Bonus VIP +${formatCurrency(bonusIncrement)} e pagamento pendente: ${formatCurrency(review.reward)}.`
+          `Avaliação enviada! Bonus VIP +${formatCurrency(bonusIncrement)} e pagamento pendente: ${formatCurrency(rewardAmount)}.`
         );
         reviewMessage.className = 'mt-3 text-xs text-emerald-300';
         setTimeout(closeReviewOverlay, 700);
@@ -4760,18 +6693,33 @@
         clearInterval(countdownTimer);
         setStatus('Desconectado');
         showAuth();
+        renderAdminAutoIAControl();
+        renderAutoIAToolControl();
       }
 
-      loadPreference(prefNotifications, 'pref_notifications', true);
-      loadPreference(prefSummary, 'pref_summary', false);
-      loadPreference(prefCompact, 'pref_compact', false);
+      bindPreferenceToggle(prefNotificationsToggle, 'pref_notifications', true);
+      bindPreferenceToggle(prefSummaryToggle, 'pref_summary', false);
+      bindPreferenceToggle(prefCompactToggle, 'pref_compact', false);
 
-      bindPreference(prefNotifications, 'pref_notifications');
-      bindPreference(prefSummary, 'pref_summary');
-      bindPreference(prefCompact, 'pref_compact');
+      if (autoAiToggleButton) {
+        autoAiToggleButton.addEventListener('click', () => {
+          if (!accountState) {
+            return;
+          }
+          if (!isAutoIAUnlocked()) {
+            renderAutoIAToolControl();
+            return;
+          }
+          accountState.autoAIEnabled = !Boolean(accountState.autoAIEnabled);
+          saveAccountState();
+          renderAutoIAToolControl();
+          renderAdminAutoIAControl();
+        });
+      }
 
       setActiveSection('dashboard');
       renderAllAdminLists();
+      renderAutoIAToolControl();
       refreshMe();
     </script>
   </body>
