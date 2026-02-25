@@ -1275,19 +1275,34 @@
         return min + (max - min) * Math.pow(Math.random(), weight);
       }
 
-      function calculateBonusByQuality(quality) {
-        switch (quality) {
-          case 'excelente':
-            return roundCurrency(randomWeightedRange(80, 120, 0.35));
-          case 'boa':
-            return roundCurrency(randomWeightedRange(50, 85, 0.7));
-          case 'regular':
-            return roundCurrency(randomWeightedRange(25, 65, 1.1));
-          case 'ruim':
-            return roundCurrency(randomWeightedRange(10, 56, 1.4));
-          default:
-            return roundCurrency(randomRange(20, 60));
+      const MAX_VIP_BONUS_PER_TASK = 30;
+      const vipBonusRules = {
+        rareRange: { min: 22, max: MAX_VIP_BONUS_PER_TASK, weight: 1.2 },
+        quality: {
+          excelente: { min: 6, max: 14, weight: 0.8, rareChance: 0.08 },
+          boa: { min: 4, max: 10, weight: 1.0, rareChance: 0.05 },
+          regular: { min: 2, max: 7, weight: 1.2, rareChance: 0.02 },
+          ruim: { min: 1, max: 5, weight: 1.4, rareChance: 0.01 },
+          default: { min: 2, max: 8, weight: 1.1, rareChance: 0.03 }
         }
+      };
+
+      function pickVipBonusProfile(quality) {
+        return vipBonusRules.quality[quality] || vipBonusRules.quality.default;
+      }
+
+      function calculateBonusByQuality(quality) {
+        const profile = pickVipBonusProfile(quality);
+        const baseBonus = randomWeightedRange(profile.min, profile.max, profile.weight);
+        if (Math.random() < profile.rareChance) {
+          const rareBonus = randomWeightedRange(
+            vipBonusRules.rareRange.min,
+            vipBonusRules.rareRange.max,
+            vipBonusRules.rareRange.weight
+          );
+          return roundCurrency(Math.min(MAX_VIP_BONUS_PER_TASK, rareBonus));
+        }
+        return roundCurrency(Math.min(MAX_VIP_BONUS_PER_TASK, baseBonus));
       }
 
       function pickMarketplaceForReview() {
@@ -2628,7 +2643,7 @@
           },
           completedAt: Date.now()
         };
-        const bonusIncrement = calculateBonusByQuality(quality);
+        const bonusIncrement = Math.min(MAX_VIP_BONUS_PER_TASK, calculateBonusByQuality(quality));
         accountState.bonusBalance = roundCurrency((accountState.bonusBalance || 0) + bonusIncrement);
         const rewardAmount = Number(review.reward || 0);
         const approvalRequest = {
