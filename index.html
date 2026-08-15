@@ -2384,6 +2384,22 @@
         overflow: hidden;
       }
 
+      .ai-ws-text .ai-ws-caret {
+        display: inline-block;
+        width: 6px;
+        margin-left: 1px;
+        border-bottom: 1.5px solid rgba(125, 211, 252, 0.9);
+        animation: aiWsBlink 1s steps(1, end) infinite;
+      }
+
+      @keyframes aiWsBlink {
+        0%, 49% { opacity: 1; }
+        50%, 100% { opacity: 0; }
+      }
+
+      .ai-ws-step--done { color: rgba(110, 231, 183, 0.9); }
+      .ai-ws-step--active { color: rgba(186, 230, 253, 0.95); }
+
       .ai-level-progress-fill,
       .ai-robot-float__fill {
         position: absolute;
@@ -4114,6 +4130,61 @@
 
                   <div class="rounded-3xl border border-white/10 bg-ink-800/75 p-6">
                     <div class="flex flex-wrap items-center justify-between gap-3">
+                      <h4 class="text-base font-semibold">Estação de trabalho da IA</h4>
+                      <span id="aiWsBadge" class="level-badge">Parada</span>
+                    </div>
+                    <p class="mt-2 text-xs text-white/60">
+                      Acompanhe a tela que a IA está usando agora: o anúncio aberto, a nota que ela deu e o texto sendo escrito.
+                    </p>
+
+                    <div class="ai-ws mt-4 overflow-hidden rounded-2xl border border-white/10 bg-ink-900/70">
+                      <div class="flex items-center gap-2 border-b border-white/10 bg-ink-900/80 px-3 py-2">
+                        <span class="h-2.5 w-2.5 rounded-full bg-rose-400/70"></span>
+                        <span class="h-2.5 w-2.5 rounded-full bg-amber-300/70"></span>
+                        <span class="h-2.5 w-2.5 rounded-full bg-emerald-400/70"></span>
+                        <span
+                          id="aiWsUrl"
+                          class="ml-2 flex-1 truncate rounded-lg bg-ink-800/80 px-3 py-1 text-[11px] text-white/50"
+                        >sobre:parado</span>
+                      </div>
+
+                      <div class="grid gap-4 p-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+                        <div class="rounded-xl border border-white/10 bg-ink-800/60 p-3">
+                          <div class="flex items-start gap-3">
+                            <div
+                              id="aiWsAvatar"
+                              class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500/30 to-fuchsia-500/25 text-sm font-semibold text-white/80"
+                            >IA</div>
+                            <div class="min-w-0">
+                              <p id="aiWsProduct" class="truncate text-sm font-semibold text-white/90">Nenhum anúncio aberto</p>
+                              <p id="aiWsMeta" class="mt-1 text-[11px] leading-relaxed text-white/50">
+                                O robô está parado.
+                              </p>
+                            </div>
+                          </div>
+                          <div class="mt-3 flex items-center justify-between gap-2">
+                            <span id="aiWsStars" class="text-base tracking-[0.2em] text-amber-300/80">☆☆☆☆☆</span>
+                            <span id="aiWsPrice" class="text-xs font-semibold text-emerald-200">—</span>
+                          </div>
+                          <ul id="aiWsSteps" class="mt-3 grid gap-1 text-[11px] text-white/55"></ul>
+                        </div>
+
+                        <div class="rounded-xl border border-white/10 bg-ink-800/60 p-3">
+                          <p class="text-[11px] font-semibold uppercase tracking-wide text-white/45">
+                            Campo de avaliação
+                          </p>
+                          <div
+                            id="aiWsText"
+                            class="ai-ws-text mt-2 min-h-[132px] whitespace-pre-wrap rounded-lg border border-white/10 bg-ink-900/70 p-3 text-[11px] leading-relaxed text-white/75"
+                          >Aguardando o robô iniciar…</div>
+                          <p id="aiWsStatus" class="mt-2 text-[11px] text-white/50">Robô IA parado.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="rounded-3xl border border-white/10 bg-ink-800/75 p-6">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
                       <h4 class="text-base font-semibold">Execução ao vivo</h4>
                       <span class="level-badge">Log em tempo real</span>
                     </div>
@@ -5164,9 +5235,10 @@
           <section class="rounded-2xl border border-white/10 bg-ink-700/60 p-5">
             <h4 class="text-base font-semibold">Distribuir por período</h4>
             <p class="mt-1 text-xs text-white/60">
-              Informe o total dos últimos dias e o sistema distribui por data de forma previsível.
+              Informe o total e o sistema distribui por data com variação realista (o total sempre bate).
+              O período fica sempre dentro do mês atual — nunca invade o mês anterior.
             </p>
-            <p class="mt-2 text-xs text-white/50">Total manual (últimos 30 dias): <span id="adminRollingValue">R$ 0,00</span></p>
+            <p class="mt-2 text-xs text-white/50">Total manual (mês atual): <span id="adminRollingValue">R$ 0,00</span></p>
             <form id="adminRollingForm" class="mt-4 grid gap-3">
               <input
                 id="adminRollingDays"
@@ -5191,8 +5263,9 @@
                 id="adminRollingMode"
                 class="w-full rounded-xl border border-white/10 bg-ink-700 px-4 py-3 text-sm text-white"
               >
-                <option value="equal" selected>Linear (valor dividido por dia)</option>
+                <option value="natural" selected>Realista (valores diferentes a cada dia)</option>
                 <option value="weighted">Inteligente (prioriza dias com histórico)</option>
+                <option value="equal">Linear (valor dividido por dia)</option>
               </select>
               <button
                 class="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
@@ -5242,7 +5315,9 @@
 
           <section class="rounded-2xl border border-white/10 bg-ink-700/60 p-5">
             <h4 class="text-base font-semibold">Resultado por mês</h4>
-            <p class="mt-1 text-xs text-white/60">Defina metas mensais quando não houver granularidade diária.</p>
+            <p class="mt-1 text-xs text-white/60">
+              Defina o total do mês: o sistema espalha em valores diferentes a cada dia, somando exatamente o valor informado.
+            </p>
             <form id="adminReportMonthForm" class="mt-4 grid gap-3">
               <input
                 id="adminReportMonth"
@@ -5727,6 +5802,12 @@
       const adminRollingMessage = document.getElementById('adminRollingMessage');
       const adminRollingValue = document.getElementById('adminRollingValue');
       const adminRollingClear = document.getElementById('adminRollingClear');
+      if (adminRollingDays) {
+        // Padrao: os dias ja decorridos do mes atual (o periodo nunca sai do mes).
+        const elapsedDaysThisMonth = new Date().getDate();
+        adminRollingDays.value = String(elapsedDaysThisMonth);
+        adminRollingDays.max = String(elapsedDaysThisMonth);
+      }
       const adminReportForm = document.getElementById('adminReportForm');
       const adminReportDate = document.getElementById('adminReportDate');
       const adminReportAmount = document.getElementById('adminReportAmount');
@@ -5929,6 +6010,7 @@
       ];
       const aiRobotTickIntervalMs = 1000;
       const aiRobotMaxLogEntries = 80;
+      const aiRobotCongratsStep = 25;
       const aiRobotTaskProfiles = {
         submit: { minMs: 75000, maxMs: 150000 },
         generate: { minMs: 55000, maxMs: 110000 },
@@ -5957,6 +6039,10 @@
       let aiRobotLastTickAt = 0;
       let aiRobotConnectedThisSession = false;
       let aiRobotTaskState = null;
+      let aiRobotLastSubmitReward = 0;
+      let aiRobotSessionEarned = 0;
+      let aiRobotSessionReviews = 0;
+      let aiRobotNextCongratsAt = aiRobotCongratsStep;
       let supportConversationTurns = [];
       let supportRequestInFlight = false;
       let marketplaceConnectSeedId = '';
@@ -7854,6 +7940,75 @@
         return map;
       }
 
+      function createSeededRandom(seed) {
+        let hash = 2166136261 >>> 0;
+        const text = String(seed || 'seed');
+        for (let index = 0; index < text.length; index += 1) {
+          hash ^= text.charCodeAt(index);
+          hash = Math.imul(hash, 16777619) >>> 0;
+        }
+        let state = hash || 1;
+        return function random() {
+          state += 0x6d2b79f5;
+          let value = state;
+          value = Math.imul(value ^ (value >>> 15), value | 1);
+          value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
+          return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+
+      // Pesos "naturais": sazonalidade semanal + tendencia + ruido + picos/quedas ocasionais.
+      // Deterministico por conta/periodo/total, entao o mesmo lancamento gera sempre a mesma curva.
+      function buildNaturalWeights(keys, approvedMap, seed) {
+        const random = createSeededRandom(seed);
+        const count = keys.length;
+        const weekdayFactors = [0.74, 1.06, 1.1, 1.04, 1.14, 1.2, 0.86];
+
+        return keys.map((key, index) => {
+          const date = parseDateKey(key);
+          const weekday = date ? date.getDay() : index % 7;
+          const progress = count > 1 ? index / (count - 1) : 0;
+          const trend = 0.86 + progress * 0.28;
+          const wave = 1 + Math.sin((index / Math.max(3, count)) * Math.PI * 2) * 0.08;
+          const noise = 0.68 + random() * 0.64;
+          const spike = random() < 0.12 ? 1.45 + random() * 0.7 : 1;
+          const slump = random() < 0.1 ? 0.4 + random() * 0.25 : 1;
+          const history = (approvedMap?.get(key) || 0) > 0 ? 1.22 : 1;
+          const factor =
+            weekdayFactors[weekday] * trend * wave * noise * spike * slump * history;
+          return Math.max(0.08, factor);
+        });
+      }
+
+      // Evita dias vizinhos com exatamente o mesmo valor (mantendo o total intacto).
+      function avoidRepeatedCents(cents) {
+        if (!Array.isArray(cents) || cents.length < 2) {
+          return cents;
+        }
+        for (let index = 1; index < cents.length; index += 1) {
+          if (cents[index] !== cents[index - 1]) {
+            continue;
+          }
+          let donor = -1;
+          let donorValue = 1;
+          for (let other = 0; other < cents.length; other += 1) {
+            if (other === index || other === index - 1) {
+              continue;
+            }
+            if (cents[other] > donorValue) {
+              donorValue = cents[other];
+              donor = other;
+            }
+          }
+          if (donor === -1) {
+            continue;
+          }
+          cents[donor] -= 1;
+          cents[index] += 1;
+        }
+        return cents;
+      }
+
       function distributeTotalByDays(totalValue, dayCount, weights = null) {
         const count = Number(dayCount || 0);
         if (!Number.isFinite(count) || count <= 0) {
@@ -7901,7 +8056,11 @@
           }
         }
 
-        return cents.map((value) => roundCurrency(value / 100));
+        if (totalCents > 0) {
+          avoidRepeatedCents(cents);
+        }
+
+        return cents.map((value) => roundCurrency(Math.max(0, value) / 100));
       }
 
       function applyManualSalesForRange(start, end, totalValue, mode = 'weighted') {
@@ -7914,10 +8073,18 @@
         }
         const keys = days.map((day) => getLocalDateKey(day));
         const approvedMap = getApprovedSalesMapByDate(start, end);
-        const weights =
-          mode === 'weighted'
-            ? keys.map((key) => ((approvedMap.get(key) || 0) > 0 ? 2 : 1))
-            : null;
+        let weights = null;
+        if (mode === 'weighted') {
+          weights = keys.map((key) => ((approvedMap.get(key) || 0) > 0 ? 2 : 1));
+        } else if (mode === 'natural') {
+          const seed = [
+            accountState.localAccountId || accountState.profile?.email || 'conta',
+            keys[0],
+            keys[keys.length - 1],
+            Math.round(Number(totalValue || 0) * 100)
+          ].join('|');
+          weights = buildNaturalWeights(keys, approvedMap, seed);
+        }
         const distributedValues = distributeTotalByDays(totalValue, keys.length, weights);
 
         if (!Array.isArray(accountState.manualSales)) {
@@ -7942,20 +8109,42 @@
         };
       }
 
-      function applyManualSalesForLastDays(dayCount, totalValue, mode = 'weighted') {
-        const safeDays = Math.max(1, Math.min(365, Math.trunc(Number(dayCount || 0) || 0)));
+      // A janela nunca ultrapassa o inicio do mes corrente: o periodo sempre
+      // fica dentro do mes de referencia em que estamos.
+      function getRollingRangeForDays(dayCount) {
+        const requestedDays = Math.max(1, Math.min(365, Math.trunc(Number(dayCount || 0) || 0)));
         const now = new Date();
         const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
         const start = new Date(end);
-        start.setDate(end.getDate() - (safeDays - 1));
+        start.setDate(end.getDate() - (requestedDays - 1));
         start.setHours(0, 0, 0, 0);
-        const applied = applyManualSalesForRange(start, end, totalValue, mode);
+        const clamped = start < monthStart;
+        const finalStart = clamped ? monthStart : start;
+        return {
+          start: finalStart,
+          end,
+          requestedDays,
+          days: daysBetweenInclusive(finalStart, end),
+          clamped
+        };
+      }
+
+      function getElapsedDaysInCurrentMonth() {
+        return new Date().getDate();
+      }
+
+      function applyManualSalesForLastDays(dayCount, totalValue, mode = 'weighted') {
+        const range = getRollingRangeForDays(dayCount);
+        const applied = applyManualSalesForRange(range.start, range.end, totalValue, mode);
         if (!applied) {
           return null;
         }
         return {
           ...applied,
-          days: safeDays
+          days: applied.count,
+          requestedDays: range.requestedDays,
+          clamped: range.clamped
         };
       }
 
@@ -8473,18 +8662,25 @@
 
       function getAIRobotTaskProgressState() {
         if (!aiRobotTaskState) {
+          const idleText = aiRobotRunning ? 'IA preparando a próxima tarefa...' : 'Aguardando início do robô.';
           return {
             percent: 0,
-            text: aiRobotRunning ? 'IA preparando a próxima tarefa...' : 'Aguardando início do robô.'
+            label: idleText,
+            stage: '',
+            text: idleText
           };
         }
         const percent = Math.min(
           100,
           Math.max(0, Math.round((Number(aiRobotTaskState.completedMs || 0) / Math.max(1, Number(aiRobotTaskState.durationMs || 1))) * 100))
         );
+        const stages = Array.isArray(aiRobotTaskState.stages) ? aiRobotTaskState.stages : [];
+        const currentStage = stages[Math.max(0, Number(aiRobotTaskState.stageIndex || 0) - 1)];
         return {
           percent,
-          text: aiRobotTaskState.label || 'Executando tarefa'
+          label: aiRobotTaskState.label || 'Executando tarefa',
+          stage: currentStage ? currentStage.message : '',
+          text: currentStage ? currentStage.message : (aiRobotTaskState.label || 'Executando tarefa')
         };
       }
 
@@ -8574,13 +8770,21 @@
         levelUsagePercentText.textContent = `${levelState.usedPercent}% do tempo diário usado`;
         levelUsageBar.style.width = `${levelState.usedPercent}%`;
         if (levelRobotTaskText) {
-          levelRobotTaskText.textContent = applyPrivacyText(taskProgress.text);
+          const liveText = taskProgress.stage
+            ? `${taskProgress.label} — ${taskProgress.stage}`
+            : taskProgress.text;
+          levelRobotTaskText.textContent = applyPrivacyText(liveText);
         }
         if (levelRobotTaskProgressBar) {
           levelRobotTaskProgressBar.style.width = `${taskProgress.percent}%`;
         }
         if (levelRobotTaskPercent) {
-          levelRobotTaskPercent.textContent = `${taskProgress.percent}% da tarefa atual`;
+          const sessionInfo = aiRobotSessionReviews > 0
+            ? ` · ${aiRobotSessionReviews} avaliação(ões) nesta sessão · ${formatCurrency(aiRobotSessionEarned)}`
+            : '';
+          levelRobotTaskPercent.textContent = applyPrivacyText(
+            `${taskProgress.percent}% da tarefa atual${sessionInfo}`
+          );
         }
 
         if (levelRulesTableBody) {
@@ -8761,7 +8965,36 @@
           approvalRequest,
           ...(accountState.balanceRequests || []).filter((request) => request.id !== approvalRequest.id)
         ];
-        return `Avaliação enviada automaticamente: ${review.marketplaceName} · ${review.productName}.`;
+        aiRobotLastSubmitReward = rewardAmount;
+        return `Avaliação enviada automaticamente: ${review.marketplaceName} · ${review.productName} (${formatCurrency(rewardAmount)}).`;
+      }
+
+      // Comemora de tempos em tempos: a cada faixa de lucro acumulada na sessao
+      // e, ocasionalmente, em marcos de quantidade de avaliacoes.
+      function celebrateAIRobotProgress() {
+        if (aiRobotSessionEarned >= aiRobotNextCongratsAt) {
+          while (aiRobotNextCongratsAt <= aiRobotSessionEarned) {
+            aiRobotNextCongratsAt += aiRobotCongratsStep;
+          }
+          const message = `Parabéns! Você já lucrou ${formatCurrency(aiRobotSessionEarned)} com a IA nesta sessão.`;
+          pushAIRobotLog(message, 'success');
+          showToast({
+            title: 'Parabéns! 🎉',
+            message,
+            type: 'success'
+          });
+          return;
+        }
+
+        if (aiRobotSessionReviews > 0 && aiRobotSessionReviews % 5 === 0) {
+          const message = `${aiRobotSessionReviews} avaliações concluídas no automático. Total de ${formatCurrency(aiRobotSessionEarned)} gerado.`;
+          pushAIRobotLog(message, 'success');
+          showToast({
+            title: 'Sequência da IA',
+            message,
+            type: 'success'
+          });
+        }
       }
 
       function getAIRobotSpeedFactor(levelId) {
@@ -8802,22 +9035,33 @@
           return [];
         }
         if (task.type === 'submit') {
+          const review = task.meta.review;
+          const reward = formatCurrency(Number(review.reward || 0));
           return [
-            { at: 0.12, message: `Abrindo anúncio de ${task.meta.review.productName} em ${task.meta.review.marketplaceName}.` },
-            { at: 0.34, message: 'Lendo descrição, preço, SKU e especificações.' },
-            { at: 0.58, message: 'Escrevendo feedback completo com linguagem natural.' },
-            { at: 0.82, message: 'Validando consistência antes do envio.' }
+            { at: 0.06, message: `Abrindo a avaliação de ${review.productName} em ${review.marketplaceName}.` },
+            { at: 0.16, message: `Autenticando na conta conectada do ${review.marketplaceName}.` },
+            { at: 0.28, message: 'Lendo descrição, preço, SKU e especificações do anúncio.' },
+            { at: 0.4, message: 'Analisando fotos e comentários de outros compradores.' },
+            { at: 0.52, message: 'Definindo nota e tom do texto conforme o histórico da conta.' },
+            { at: 0.64, message: 'Escrevendo o feedback completo com linguagem natural.' },
+            { at: 0.76, message: 'Revisando ortografia e removendo padrões repetidos.' },
+            { at: 0.88, message: `Validando consistência e preparando envio (${reward}).` }
           ];
         }
         if (task.type === 'generate') {
+          const template = task.meta.template;
           return [
-            { at: 0.18, message: `Mapeando catálogo no ${task.meta.template.marketplaceName}.` },
-            { at: 0.44, message: 'Selecionando produto com potencial de conversão.' },
-            { at: 0.72, message: 'Gerando tarefa e estimando recompensa com base no histórico.' }
+            { at: 0.12, message: `Mapeando catálogo no ${template.marketplaceName}.` },
+            { at: 0.3, message: 'Filtrando produtos por giro, avaliação e disponibilidade.' },
+            { at: 0.5, message: `Selecionando ${template.productName} para a fila.` },
+            { at: 0.7, message: 'Estimando recompensa com base no histórico da conta.' },
+            { at: 0.88, message: 'Registrando a tarefa e agendando execução.' }
           ];
         }
         return [
-          { at: 0.5, message: 'Monitorando fila e aguardando a melhor janela operacional.' }
+          { at: 0.25, message: 'Monitorando fila e checando marketplaces conectados.' },
+          { at: 0.6, message: 'Procurando a melhor janela operacional para a próxima ação.' },
+          { at: 0.85, message: 'Nenhuma tarefa disponível agora. Seguindo em observação.' }
         ];
       }
 
@@ -8964,13 +9208,19 @@
         let completionType = 'info';
         let changed = false;
 
+        let celebrate = false;
+
         if (aiRobotTaskState.type === 'submit') {
           const reviewId = aiRobotTaskState.meta && aiRobotTaskState.meta.review ? aiRobotTaskState.meta.review.id : null;
+          aiRobotLastSubmitReward = 0;
           const submitMessage = robotSubmitReviewOnce(reviewId);
           if (submitMessage) {
             completionMessage = submitMessage;
             completionType = 'success';
             changed = true;
+            aiRobotSessionReviews += 1;
+            aiRobotSessionEarned = roundCurrency(aiRobotSessionEarned + Number(aiRobotLastSubmitReward || 0));
+            celebrate = true;
           } else {
             completionMessage = 'A avaliação alvo saiu da fila antes da conclusão da IA.';
             completionType = 'warn';
@@ -8997,7 +9247,16 @@
         }
 
         pushAIRobotLog(completionMessage, completionType);
+        if (celebrate) {
+          celebrateAIRobotProgress();
+        }
         aiRobotTaskState = null;
+
+        // Emenda direto na proxima tarefa para o painel nunca ficar parado.
+        aiRobotTaskState = createAIRobotTask();
+        if (aiRobotTaskState) {
+          pushAIRobotLog(`IA iniciou: ${aiRobotTaskState.label}.`, 'info');
+        }
       }
 
       function consumeAIRobotElapsedTime(nowValue = Date.now()) {
@@ -9084,6 +9343,9 @@
         aiRobotConnectedThisSession = false;
         aiRobotLastTickAt = Date.now();
         aiRobotTaskState = null;
+        aiRobotSessionEarned = 0;
+        aiRobotSessionReviews = 0;
+        aiRobotNextCongratsAt = aiRobotCongratsStep;
         pushAIRobotLog(`Robô IA iniciado no nível ${levelState.currentLevel.name}.`, 'success');
         runAIRobotCycle(0);
         renderAIRobotLevelsPanel();
@@ -9126,6 +9388,12 @@
 
       function stopAIRobotAutomation(reason = '', silent = false) {
         clearTimeout(aiRobotTimer);
+        if (aiRobotRunning && aiRobotSessionReviews > 0) {
+          pushAIRobotLog(
+            `Sessão encerrada: ${aiRobotSessionReviews} avaliação(ões) e ${formatCurrency(aiRobotSessionEarned)} gerados.`,
+            'success'
+          );
+        }
         aiRobotRunning = false;
         aiRobotPaused = false;
         aiRobotLastTickAt = 0;
@@ -9207,28 +9475,72 @@
         return new Date(year, monthIndex + 1, 0).getDate();
       }
 
+      const monthlyBreakdownCache = new Map();
+
+      function resetMonthlyBreakdownCache() {
+        monthlyBreakdownCache.clear();
+      }
+
+      // Quebra o total do mes em valores diferentes por dia (mesma curva realista
+      // usada na distribuicao por periodo). O resultado e memorizado porque o
+      // relatorio recalcula os totais varias vezes por render.
+      function getMonthlyDailyBreakdown(monthValue, totalValue) {
+        const parts = String(monthValue || '').split('-').map(Number);
+        const year = parts[0];
+        const month = parts[1];
+        if (!year || !month) {
+          return [];
+        }
+        const total = Number(totalValue || 0);
+        if (!Number.isFinite(total)) {
+          return [];
+        }
+        const cacheKey = `${year}-${month}|${Math.round(total * 100)}`;
+        const cached = monthlyBreakdownCache.get(cacheKey);
+        if (cached) {
+          return cached;
+        }
+
+        const daysInMonth = getDaysInMonth(year, month - 1);
+        const dates = [];
+        for (let day = 1; day <= daysInMonth; day += 1) {
+          dates.push(new Date(year, month - 1, day, 0, 0, 0));
+        }
+        const keys = dates.map((date) => getLocalDateKey(date));
+        const approvedMap = getApprovedSalesMapByDate(
+          new Date(year, month - 1, 1, 0, 0, 0, 0),
+          new Date(year, month - 1, daysInMonth, 23, 59, 59, 999)
+        );
+        const seed = [
+          accountState?.localAccountId || 'conta',
+          'mes',
+          monthValue,
+          Math.round(total * 100)
+        ].join('|');
+        const weights = buildNaturalWeights(keys, approvedMap, seed);
+        const values = distributeTotalByDays(total, keys.length, weights);
+        const breakdown = keys.map((key, index) => ({
+          key,
+          date: dates[index],
+          value: values[index] || 0
+        }));
+
+        if (monthlyBreakdownCache.size > 48) {
+          resetMonthlyBreakdownCache();
+        }
+        monthlyBreakdownCache.set(cacheKey, breakdown);
+        return breakdown;
+      }
+
       function applyMonthlyOverrides(totals, start, end) {
         const months = getManualMonthlyEntries();
         months.forEach((entry) => {
-          const parts = String(entry.month).split('-').map(Number);
-          if (parts.length < 2) {
-            return;
-          }
-          const year = parts[0];
-          const month = parts[1];
-          if (!year || !month) {
-            return;
-          }
-          const daysInMonth = getDaysInMonth(year, month - 1);
-          const dailyValue = Number(entry.value || 0) / daysInMonth;
-          for (let day = 1; day <= daysInMonth; day += 1) {
-            const date = new Date(year, month - 1, day, 0, 0, 0);
-            if (date < start || date > end) {
-              continue;
+          getMonthlyDailyBreakdown(entry.month, entry.value).forEach((item) => {
+            if (item.date < start || item.date > end) {
+              return;
             }
-            const key = getLocalDateKey(date);
-            totals.set(key, dailyValue);
-          }
+            totals.set(item.key, item.value);
+          });
         });
       }
 
@@ -9719,9 +10031,7 @@
         if (adminRollingValue) {
           const now = new Date();
           const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
-          const start = new Date(end);
-          start.setDate(end.getDate() - 29);
-          start.setHours(0, 0, 0, 0);
+          const start = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
           const manualMap = getManualSalesMap();
           let manualLast30 = 0;
           let manualCount = 0;
@@ -14004,7 +14314,8 @@
             return;
           }
 
-          const mode = adminRollingMode?.value === 'weighted' ? 'weighted' : 'equal';
+          const selectedMode = adminRollingMode?.value || 'natural';
+          const mode = ['natural', 'weighted', 'equal'].includes(selectedMode) ? selectedMode : 'natural';
           const applied = applyManualSalesForLastDays(days, amount, mode);
           if (!applied) {
             adminRollingMessage.textContent = 'Nao foi possivel aplicar o periodo.';
@@ -14026,9 +14337,12 @@
             reportCustomEndDate.value = applied.endKey;
           }
           updateReportSummary();
-          addActivity(`Distribuicao aplicada: ${formatCurrency(amount)} em ${days} dias (${mode === 'weighted' ? 'inteligente' : 'linear'}).`);
+          const modeLabels = { natural: 'realista', weighted: 'inteligente', equal: 'linear' };
+          addActivity(`Distribuicao aplicada: ${formatCurrency(amount)} em ${applied.days} dias (${modeLabels[mode] || mode}).`);
 
-          adminRollingMessage.textContent = `Distribuicao aplicada de ${applied.startKey} ate ${applied.endKey}.`;
+          adminRollingMessage.textContent = applied.clamped
+            ? `Distribuicao aplicada de ${applied.startKey} ate ${applied.endKey} (${applied.days} dias do mes atual).`
+            : `Distribuicao aplicada de ${applied.startKey} ate ${applied.endKey}.`;
           adminRollingMessage.classList.add('text-emerald-300');
           if (adminRollingAmount) {
             adminRollingAmount.value = '';
@@ -14047,15 +14361,13 @@
             adminRollingMessage.className = 'mt-3 text-xs text-rose-300';
             return;
           }
-          const confirmed = window.confirm(`Remover valores manuais dos ultimos ${days} dias?`);
+          const range = getRollingRangeForDays(days);
+          const confirmed = window.confirm(`Remover valores manuais dos ultimos ${range.days} dias (mes atual)?`);
           if (!confirmed) {
             return;
           }
-          const now = new Date();
-          const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
-          const start = new Date(end);
-          start.setDate(end.getDate() - (days - 1));
-          start.setHours(0, 0, 0, 0);
+          const start = range.start;
+          const end = range.end;
           const removed = clearManualSalesForRange(start, end);
           saveAccountState();
           renderAdminReportList();
@@ -14184,13 +14496,18 @@
             accountState.manualSalesMonths.push(entry);
           }
 
+          resetMonthlyBreakdownCache();
           saveAccountState();
           renderAdminReportMonthList();
           updateSalesReport();
           updateReportSummary();
           addActivity(`Resultado do mes ${monthValue} ajustado para ${formatCurrency(entry.value)}.`);
 
-          adminReportMonthMessage.textContent = 'Resultado mensal atualizado com sucesso.';
+          const breakdown = getMonthlyDailyBreakdown(monthValue, entry.value);
+          const dayValues = breakdown.map((item) => item.value);
+          const minDay = dayValues.length ? Math.min(...dayValues) : 0;
+          const maxDay = dayValues.length ? Math.max(...dayValues) : 0;
+          adminReportMonthMessage.textContent = `Mes atualizado e distribuido em ${breakdown.length} dias (${formatCurrency(minDay)} a ${formatCurrency(maxDay)} por dia).`;
           adminReportMonthMessage.classList.add('text-emerald-300');
           if (adminReportMonthAmount) {
             adminReportMonthAmount.value = '';
@@ -14206,6 +14523,7 @@
           }
           const monthValue = target.getAttribute('data-admin-report-month-remove');
           accountState.manualSalesMonths = (accountState.manualSalesMonths || []).filter((entry) => entry.month !== monthValue);
+          resetMonthlyBreakdownCache();
           saveAccountState();
           renderAdminReportMonthList();
           updateSalesReport();
