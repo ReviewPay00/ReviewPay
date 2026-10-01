@@ -701,6 +701,47 @@
         }
       }
 
+      /* ------- Mobile: a barra do ☰ fica fixa no topo e o cabeçalho de
+         boas-vindas rola junto (compacto), em vez de dois blocos grudando. -- */
+      @media (max-width: 1023px) {
+        .rp-mobnav {
+          position: sticky;
+          top: 0;
+          z-index: 50; /* abaixo do drawer (60) e do backdrop (55) */
+          background: var(--surface);
+          border-bottom: 1px solid var(--line-2);
+          padding-top: calc(12px + env(safe-area-inset-top, 0px));
+          box-shadow: 0 10px 30px -22px rgba(0, 0, 0, 0.9);
+        }
+
+        main > header.rp-apphead {
+          position: static !important;
+          padding: 14px 16px !important;
+          gap: 10px !important;
+          background: transparent !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          box-shadow: none !important;
+        }
+        .rp-apphead h2 {
+          font-size: 1.3rem !important;
+        }
+        /* os badges de plano são marketing e poluem o topo no celular */
+        .rp-apphead .plan-badge {
+          display: none !important;
+        }
+        /* bloco de ações vira uma linha única, enxuta e alinhada à esquerda */
+        .rp-apphead > div:last-child {
+          width: 100%;
+          justify-content: flex-start !important;
+          gap: 10px !important;
+        }
+        /* carteira compacta: some o rótulo, fica só valor + olho */
+        .rp-apphead > div:last-child > div:not(.plan-badge):not([id]) {
+          padding: 8px 12px !important;
+        }
+      }
+
       @media (min-width: 1024px) {
         .rp-drawer,
         .rp-drawer-backdrop {
@@ -4045,7 +4086,7 @@
               <span class="rp-notifbell__dot"></span>
             </button>
           </div>
-          <header class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 bg-gradient-to-r from-ink-800/90 via-ink-900/95 to-ink-800/90 px-6 py-6 backdrop-blur shadow-[0_20px_50px_-30px_rgba(15,23,42,0.8)]">
+          <header class="rp-apphead flex flex-wrap items-center justify-between gap-4 border-b border-white/10 bg-gradient-to-r from-ink-800/90 via-ink-900/95 to-ink-800/90 px-6 py-6 backdrop-blur shadow-[0_20px_50px_-30px_rgba(15,23,42,0.8)]">
             <div>
               <p class="rp-label flex items-center gap-2">
                 <span class="rp-live"></span>
