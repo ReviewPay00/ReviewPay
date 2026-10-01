@@ -977,6 +977,52 @@
         color: var(--accent);
       }
 
+      /* Lembrar de mim */
+      .rp-remember {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        user-select: none;
+        margin-top: -2px;
+      }
+      .rp-remember__box {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+        pointer-events: none;
+      }
+      .rp-remember__mark {
+        display: grid;
+        place-content: center;
+        width: 20px;
+        height: 20px;
+        flex: none;
+        border-radius: 7px;
+        border: 1px solid var(--line-2);
+        background: var(--surface-2);
+        color: transparent;
+        transition: background var(--t), border-color var(--t), color var(--t);
+      }
+      .rp-remember__mark svg {
+        width: 13px;
+        height: 13px;
+      }
+      .rp-remember__box:checked + .rp-remember__mark {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--accent-ink);
+      }
+      .rp-remember__box:focus-visible + .rp-remember__mark {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .rp-remember__text {
+        font-size: 12.5px;
+        color: var(--text-2);
+      }
+
       /* Modo simples da avaliação: garante que os blocos ocultos fiquem ocultos
          mesmo com as classes .rp-rv-* que definem display próprio (o Tailwind
          pré-compilado tem a mesma especificidade e perderia por ordem). */
@@ -3865,6 +3911,16 @@
                 </button>
               </div>
             </div>
+
+            <label id="loginRememberLabel" class="rp-remember" for="loginRemember">
+              <input id="loginRemember" type="checkbox" class="rp-remember__box" />
+              <span class="rp-remember__mark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4 4 10-10" />
+                </svg>
+              </span>
+              <span class="rp-remember__text">Lembrar de mim neste dispositivo</span>
+            </label>
 
             <button class="rp-btn rp-btn--primary rp-btn--lg mt-1" type="submit">Entrar</button>
           </form>
@@ -19335,6 +19391,35 @@
         });
       }
 
+      // "Lembrar de mim": guarda e-mail + senha neste dispositivo e já
+      // preenche o formulário na próxima vez.
+      const loginRemember = document.getElementById('loginRemember');
+      const rememberLoginKey = 'rp_remember_login';
+      (function prefillRememberedLogin() {
+        try {
+          const raw = safeStorageGet(rememberLoginKey);
+          if (!raw) {
+            return;
+          }
+          const data = JSON.parse(raw);
+          if (data && data.email) {
+            const emailEl = document.getElementById('loginEmail');
+            const passEl = document.getElementById('loginPassword');
+            if (emailEl) {
+              emailEl.value = data.email;
+            }
+            if (passEl) {
+              passEl.value = data.password || '';
+            }
+            if (loginRemember) {
+              loginRemember.checked = true;
+            }
+          }
+        } catch (error) {
+          /* ignora dados corrompidos */
+        }
+      })();
+
       document.getElementById('loginForm').addEventListener('submit', (event) => {
         event.preventDefault();
         const form = event.target;
@@ -19351,6 +19436,16 @@
 
         if (isLocalEmailValid(email) && isLocalPasswordValid(password)) {
           safeStorageSet(localAuthKey, 'true');
+          // Lembrar de mim: salva (ou limpa) as credenciais deste dispositivo.
+          try {
+            if (loginRemember && loginRemember.checked) {
+              safeStorageSet(rememberLoginKey, JSON.stringify({ email: email.trim(), password }));
+            } else {
+              safeStorageRemove(rememberLoginKey);
+            }
+          } catch (error) {
+            /* ignora falha de storage */
+          }
           try {
             setUserInfo({ id: 'local-user', email: localLoginEmail });
           } catch (error) {
@@ -21879,8 +21974,12 @@
          locais quando há avaliação na fila. Sem servidor de push, os avisos
          saem enquanto o app está aberto/rodando no celular.
          ====================================================================== */
-      const notifBell = document.getElementById('mobileNotifyToggle');
-      let swRegistration = null;
+      // var (não const) de propósito: estas funções são chamadas no boot por
+      // refreshMe() -> notifyNewTask(), que roda ANTES desta linha. Com const
+      // isso cairia em TDZ ("Cannot access 'notifBell' before initialization");
+      // var é hoisted (vale undefined até aqui) e os guards tratam isso.
+      var notifBell = document.getElementById('mobileNotifyToggle');
+      var swRegistration = null;
 
       function notifSupported() {
         return typeof Notification !== 'undefined';
