@@ -1030,6 +1030,128 @@
         display: none !important;
       }
 
+      /* Capriche e ganhe mais (foto/vídeo/comentário) */
+      .rp-earn-grid {
+        display: grid;
+        gap: 8px;
+      }
+      .rp-earn-item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: var(--r-md, 14px);
+        border: 1px solid var(--line-2);
+        background: var(--surface-2, rgba(255, 255, 255, 0.03));
+        cursor: pointer;
+        transition: border-color var(--t), background var(--t);
+      }
+      label.rp-earn-item:hover {
+        border-color: var(--accent-line);
+      }
+      .rp-earn-item__input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+      }
+      .rp-earn-item__icon {
+        font-size: 20px;
+        line-height: 1;
+        flex: none;
+      }
+      .rp-earn-item__text {
+        display: grid;
+        gap: 2px;
+        min-width: 0;
+        flex: 1;
+      }
+      .rp-earn-item__text strong {
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .rp-earn-item__text small {
+        font-size: 11.5px;
+        color: var(--text-3);
+      }
+      .rp-earn-item__bonus {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--text-3);
+        white-space: nowrap;
+        flex: none;
+      }
+      .rp-earn-item.is-on {
+        border-color: var(--accent-line);
+        background: var(--accent-soft);
+      }
+      .rp-earn-item.is-on .rp-earn-item__bonus,
+      .rp-earn-item.is-on .rp-earn-item__text small {
+        color: var(--accent);
+      }
+      .rp-earn-tag {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--text-3);
+        white-space: nowrap;
+        flex: none;
+        transition: color var(--t);
+      }
+      .rp-earn-tag.is-on {
+        color: var(--accent);
+      }
+      .rp-earn-previews {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 8px;
+      }
+      .rp-earn-previews:empty {
+        display: none;
+      }
+      .rp-earn-thumb {
+        width: 46px;
+        height: 46px;
+        border-radius: 10px;
+        object-fit: cover;
+        border: 1px solid var(--line-2);
+      }
+      .rp-earn-thumb--ai {
+        display: grid;
+        place-content: center;
+        font-size: 20px;
+        background: var(--accent-soft);
+        border-color: var(--accent-line);
+      }
+      .rp-earn-thumb--video {
+        display: grid;
+        place-content: center;
+        background-color: var(--surface-3, #20252f);
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+      }
+      .rp-earn-thumb--video::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.42);
+      }
+      .rp-earn-thumb__play {
+        position: relative;
+        z-index: 1;
+        font-size: 15px;
+      }
+
       /* --------------------------------------------------------------------------
          BADGES / PILLS
          -------------------------------------------------------------------------- */
@@ -5582,7 +5704,7 @@
         <div class="flex items-start justify-between gap-4">
           <div>
             <h3 class="text-xl font-semibold">Avaliar produto</h3>
-            <p class="mt-1 text-sm text-white/60">Dê sua nota e clique em enviar. Rapidinho. 👍</p>
+            <p class="mt-1 text-sm text-white/60">Dê sua nota. Quanto mais caprichar (foto, vídeo, comentário), mais você ganha.</p>
           </div>
           <button
             id="reviewCancel"
@@ -5620,13 +5742,16 @@
           </div>
 
           <div class="rp-rv-pay">
-            <div>
-              <p class="rp-rv-pay__label">Você recebe quando esta avaliação for aprovada</p>
+            <div class="w-full min-w-0">
+              <p class="rp-rv-pay__label">Você vai receber por esta avaliação</p>
               <p id="reviewRewardValue" class="rp-rv-pay__value">R$ 0,00</p>
+              <div class="ai-level-progress-track mt-2">
+                <span id="reviewRewardBar" class="ai-level-progress-fill" style="width: 0%"></span>
+              </div>
+              <p id="reviewRewardHint" class="rp-rv-pay__label mt-1.5">
+                Marque aspectos e pontos, e adicione foto e vídeo para chegar ao valor cheio.
+              </p>
             </div>
-            <p class="rp-rv-pay__label" style="max-width: 260px;">
-              O preço acima é o do anúncio, não o seu pagamento. O bônus VIP entra à parte.
-            </p>
           </div>
 
           <!-- tipo de produto: muda as perguntas da avaliacao -->
@@ -5653,7 +5778,7 @@
           </div>
 
           <!-- codigo SKU: sempre presente e obrigatorio -->
-          <div class="rp-rv-field hidden">
+          <div class="rp-rv-field">
             <label class="rp-rv-label" for="reviewSku">Código SKU do produto (obrigatório)</label>
             <input
               id="reviewSku"
@@ -5718,18 +5843,24 @@
             </div>
           </div>
 
-          <div class="hidden">
-            <p class="rp-rv-label">Notas por aspecto</p>
+          <div>
+            <div class="flex items-center justify-between gap-3">
+              <p class="rp-rv-label">Notas por aspecto <span class="text-white/40">· toque as estrelas</span></p>
+              <span class="rp-earn-tag" id="reviewAspectsBonus">+R$ 0,00</span>
+            </div>
             <div class="rp-rv-aspects mt-2" id="reviewAspects"></div>
           </div>
 
-          <div class="hidden">
-            <p class="rp-rv-label">Pontos positivos</p>
+          <div>
+            <div class="flex items-center justify-between gap-3">
+              <p class="rp-rv-label">Pontos positivos <span class="text-white/40">· toque pra marcar</span></p>
+              <span class="rp-earn-tag" id="reviewPontosBonus">+R$ 0,00</span>
+            </div>
             <div class="rp-rv-tags mt-2" id="reviewProsTags"></div>
           </div>
 
-          <div class="hidden">
-            <p class="rp-rv-label">Pontos a melhorar</p>
+          <div>
+            <p class="rp-rv-label">Pontos a melhorar <span class="text-white/40">· toque pra marcar</span></p>
             <div class="rp-rv-tags mt-2" id="reviewConsTags"></div>
           </div>
 
@@ -5747,19 +5878,38 @@
             />
           </div>
 
+          <!-- comentário escondido: a IA preenche o texto no envio -->
+          <div class="rp-rv-field hidden">
+            <label class="rp-rv-label" for="reviewFeedback">Comentário</label>
+            <textarea id="reviewFeedback" maxlength="400" rows="3"></textarea>
+            <span id="reviewFeedbackCount" class="rp-rv-hint">0 / 400</span>
+          </div>
+
+          <!-- Capriche e ganhe mais: cada item aumenta o valor da avaliação -->
           <div class="rp-rv-field">
-            <div class="flex items-center justify-between gap-3">
-              <label class="rp-rv-label" for="reviewFeedback">Comentário <span class="text-white/40">(opcional)</span></label>
-              <span id="reviewFeedbackCount" class="rp-rv-hint">0 / 400</span>
+            <p class="rp-rv-label">Capriche e ganhe mais</p>
+            <p class="rp-rv-hint">Avaliação simples paga centavos. Marque os pontos e adicione foto e vídeo para chegar ao valor cheio.</p>
+            <div class="rp-earn-grid mt-2.5">
+              <label class="rp-earn-item" data-earn="photo">
+                <input id="reviewPhotos" type="file" accept="image/*" multiple class="rp-earn-item__input" />
+                <span class="rp-earn-item__icon">📷</span>
+                <span class="rp-earn-item__text">
+                  <strong>Adicionar fotos</strong>
+                  <small id="reviewPhotosStatus">Nenhuma foto adicionada</small>
+                </span>
+                <span class="rp-earn-item__bonus" id="reviewPhotosBonus">+R$ 0,00</span>
+              </label>
+              <label class="rp-earn-item" data-earn="video">
+                <input id="reviewVideo" type="file" accept="video/*" class="rp-earn-item__input" />
+                <span class="rp-earn-item__icon">🎥</span>
+                <span class="rp-earn-item__text">
+                  <strong>Adicionar vídeo</strong>
+                  <small id="reviewVideoStatus">Nenhum vídeo adicionado</small>
+                </span>
+                <span class="rp-earn-item__bonus" id="reviewVideoBonus">+R$ 0,00</span>
+              </label>
             </div>
-            <textarea
-              id="reviewFeedback"
-              maxlength="400"
-              class="w-full rounded-2xl border border-white/10 bg-ink-700 px-4 py-3 text-sm text-white placeholder:text-white/40"
-              rows="3"
-              placeholder="Se quiser, escreva algo. Se deixar em branco, a IA escreve por você."
-            ></textarea>
-            <p class="rp-rv-hint">Pode deixar vazio — a gente completa automaticamente.</p>
+            <div id="reviewPhotosPreview" class="rp-earn-previews"></div>
           </div>
 
           <div class="rp-rv-field hidden">
@@ -5816,7 +5966,7 @@
           <div class="rp-rv-actions">
             <button
               id="reviewOpenSupportAI"
-              class="robot-action hidden items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold transition"
+              class="robot-action inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold transition"
               type="button"
               title="Preencher avaliacao com IA"
             >
@@ -6516,6 +6666,19 @@
       const reviewProductSkuChip = document.getElementById('reviewProductSkuChip');
       const reviewProductPrice = document.getElementById('reviewProductPrice');
       const reviewRewardValue = document.getElementById('reviewRewardValue');
+      const reviewRewardBar = document.getElementById('reviewRewardBar');
+      const reviewRewardHint = document.getElementById('reviewRewardHint');
+      const reviewPhotos = document.getElementById('reviewPhotos');
+      const reviewVideo = document.getElementById('reviewVideo');
+      const reviewPhotosStatus = document.getElementById('reviewPhotosStatus');
+      const reviewVideoStatus = document.getElementById('reviewVideoStatus');
+      const reviewCommentStatus = document.getElementById('reviewCommentStatus');
+      const reviewPhotosBonus = document.getElementById('reviewPhotosBonus');
+      const reviewVideoBonus = document.getElementById('reviewVideoBonus');
+      const reviewCommentBonus = document.getElementById('reviewCommentBonus');
+      const reviewAspectsBonus = document.getElementById('reviewAspectsBonus');
+      const reviewPontosBonus = document.getElementById('reviewPontosBonus');
+      const reviewPhotosPreview = document.getElementById('reviewPhotosPreview');
       const reviewRatingGroup = document.getElementById('reviewRatingGroup');
       const reviewFeedbackCount = document.getElementById('reviewFeedbackCount');
       const reviewConfirmBox = document.getElementById('reviewConfirmBox');
@@ -13325,9 +13488,10 @@
         const unlockState = getAutoIAUnlockState();
         const unlocked = unlockState.unlocked;
         const enabled = isAutoAIEnabled();
-        reviewOpenSupportAI.disabled = !enabled;
+        // Mantém o botão clicável mesmo bloqueado: ao tocar, o handler mostra a
+        // mensagem "falta R$X para liberar" (importante no celular, sem hover).
+        reviewOpenSupportAI.disabled = false;
         reviewOpenSupportAI.classList.toggle('opacity-50', !enabled);
-        reviewOpenSupportAI.classList.toggle('cursor-not-allowed', !enabled);
 
         if (!accountState) {
           reviewOpenSupportAI.title = 'Auto IA indisponível no momento.';
@@ -16571,6 +16735,176 @@
       let reviewSelectedPros = [];
       let reviewSelectedCons = [];
 
+      // "Capriche e ganhe mais": quanto o usuário anexa define o pagamento.
+      let reviewPhotoCount = 0;
+      let reviewHasVideo = false;
+      let reviewPhotoURLs = [];        // object URLs de fotos que o usuário escolheu
+      let reviewPhotoThumbSrcs = [];   // URLs a mostrar na pré-visualização
+      let reviewVideoHref = '';        // link do vídeo (busca real do produto)
+      // Pesos: tudo é "de marcar". Avaliação simples (só a nota) paga pouco;
+      // aspectos, pontos, foto e vídeo somam até 100% do valor do anúncio.
+      const reviewEarnWeights = { rating: 0.1, aspects: 0.25, pontos: 0.15, photo: 0.2, video: 0.3 };
+
+      function getReviewEarnings() {
+        const review = accountState && activeReviewId
+          ? accountState.reviews.find((r) => r.id === activeReviewId)
+          : null;
+        const max = review ? Number(review.reward || 0) : 0;
+        const hasRating = Boolean(document.querySelector('input[name="reviewRating"]:checked'));
+        const aspectKeys = getReviewAspectKeys();
+        const hasAspects = aspectKeys.length > 0 && aspectKeys.every((key) => Number(reviewAspectScores[key]) > 0);
+        const pontosCount = (reviewSelectedPros ? reviewSelectedPros.length : 0)
+          + (reviewSelectedCons ? reviewSelectedCons.length : 0);
+        const hasPontos = pontosCount >= 2;
+        const hasPhoto = reviewPhotoCount > 0;
+        const hasVideo = reviewHasVideo;
+        const w = reviewEarnWeights;
+        let pct = 0;
+        if (hasRating) pct += w.rating;
+        if (hasAspects) pct += w.aspects;
+        if (hasPontos) pct += w.pontos;
+        if (hasPhoto) pct += w.photo;
+        if (hasVideo) pct += w.video;
+        return {
+          earned: roundCurrency(max * pct),
+          pct,
+          max,
+          hasRating,
+          hasAspects,
+          hasPontos,
+          hasPhoto,
+          hasVideo
+        };
+      }
+
+      function toggleEarnItem(name, on) {
+        const el = document.querySelector(`.rp-earn-item[data-earn="${name}"]`);
+        if (el) {
+          el.classList.toggle('is-on', Boolean(on));
+        }
+      }
+
+      function updateReviewEarnings() {
+        const e = getReviewEarnings();
+        const w = reviewEarnWeights;
+        if (reviewRewardValue) {
+          setSensitiveValue(reviewRewardValue, formatCurrency(e.earned));
+        }
+        if (reviewRewardBar) {
+          reviewRewardBar.style.width = `${Math.round(e.pct * 100)}%`;
+        }
+        if (reviewRewardHint) {
+          reviewRewardHint.textContent = `Até ${formatCurrency(e.max)} marcando aspectos, pontos, foto e vídeo.`;
+        }
+        if (reviewPhotosBonus) {
+          reviewPhotosBonus.textContent = `+${formatCurrency(e.max * w.photo)}`;
+        }
+        if (reviewVideoBonus) {
+          reviewVideoBonus.textContent = `+${formatCurrency(e.max * w.video)}`;
+        }
+        if (reviewAspectsBonus) {
+          reviewAspectsBonus.textContent = `+${formatCurrency(e.max * w.aspects)}`;
+          reviewAspectsBonus.classList.toggle('is-on', e.hasAspects);
+        }
+        if (reviewPontosBonus) {
+          reviewPontosBonus.textContent = `+${formatCurrency(e.max * w.pontos)}`;
+          reviewPontosBonus.classList.toggle('is-on', e.hasPontos);
+        }
+        if (reviewPhotosStatus) {
+          reviewPhotosStatus.textContent = reviewPhotoCount > 0
+            ? `${reviewPhotoCount} foto${reviewPhotoCount > 1 ? 's' : ''} adicionada${reviewPhotoCount > 1 ? 's' : ''} ✓`
+            : 'Nenhuma foto adicionada';
+        }
+        if (reviewVideoStatus) {
+          reviewVideoStatus.textContent = reviewHasVideo ? 'Vídeo adicionado ✓' : 'Nenhum vídeo adicionado';
+        }
+        toggleEarnItem('photo', e.hasPhoto);
+        toggleEarnItem('video', e.hasVideo);
+      }
+
+      function clearReviewMedia() {
+        reviewPhotoURLs.forEach((u) => {
+          try { URL.revokeObjectURL(u); } catch (err) { /* ignora */ }
+        });
+        reviewPhotoURLs = [];
+        reviewPhotoThumbSrcs = [];
+        reviewVideoHref = '';
+        reviewPhotoCount = 0;
+        reviewHasVideo = false;
+        if (reviewPhotos) reviewPhotos.value = '';
+        if (reviewVideo) reviewVideo.value = '';
+        if (reviewPhotosPreview) reviewPhotosPreview.innerHTML = '';
+      }
+
+      // Mostra as miniaturas das fotos + um card de vídeo (se houver).
+      function renderReviewMediaPreview() {
+        if (!reviewPhotosPreview) {
+          return;
+        }
+        reviewPhotosPreview.innerHTML = '';
+        reviewPhotoThumbSrcs.slice(0, 6).forEach((src) => {
+          const img = document.createElement('img');
+          img.className = 'rp-earn-thumb';
+          img.src = src;
+          img.alt = 'foto do produto';
+          img.referrerPolicy = 'no-referrer';
+          img.loading = 'lazy';
+          img.onerror = () => {
+            const ph = document.createElement('span');
+            ph.className = 'rp-earn-thumb rp-earn-thumb--ai';
+            ph.textContent = '🖼️';
+            img.replaceWith(ph);
+          };
+          reviewPhotosPreview.appendChild(img);
+        });
+        if (reviewHasVideo) {
+          const poster = reviewPhotoThumbSrcs[0];
+          const node = reviewVideoHref ? document.createElement('a') : document.createElement('span');
+          node.className = 'rp-earn-thumb rp-earn-thumb--video';
+          node.title = 'Vídeos deste produto';
+          if (reviewVideoHref) {
+            node.href = reviewVideoHref;
+            node.target = '_blank';
+            node.rel = 'noopener';
+          }
+          if (poster) {
+            node.style.backgroundImage = `url("${poster}")`;
+          }
+          node.innerHTML = '<span class="rp-earn-thumb__play">▶</span>';
+          reviewPhotosPreview.appendChild(node);
+        }
+      }
+
+      // Auto IA: pega fotos reais do anúncio e o vídeo de busca do produto.
+      async function attachAutoMediaFromInternet(review) {
+        if (!review) {
+          return;
+        }
+        const meta = review.productMeta || getProductMeta(review.productName, review.marketplaceName);
+        let candidates = [];
+        try {
+          candidates = await getProductImageCandidates(review, meta);
+        } catch (err) {
+          candidates = [];
+        }
+        // prioriza URLs reais (http); descarta o SVG de fallback (data:)
+        const realPhotos = (candidates || []).filter((u) => typeof u === 'string' && /^https?:/i.test(u));
+        const photoUrls = (realPhotos.length ? realPhotos : (candidates || [])).slice(0, 3);
+        // limpa fotos manuais anteriores
+        reviewPhotoURLs.forEach((u) => {
+          try { URL.revokeObjectURL(u); } catch (err) { /* ignora */ }
+        });
+        reviewPhotoURLs = [];
+        reviewPhotoThumbSrcs = photoUrls;
+        reviewPhotoCount = photoUrls.length;
+        // vídeo real: busca do produto no YouTube (nome + SKU)
+        const q = encodeURIComponent(`${review.productName} ${meta.sku || ''}`.trim());
+        reviewVideoHref = `https://www.youtube.com/results?search_query=${q}`;
+        reviewHasVideo = true;
+        renderReviewMediaPreview();
+        updateReviewEarnings();
+      }
+
       function renderReviewAspects() {
         if (!reviewAspects) {
           return;
@@ -16815,6 +17149,8 @@
         updateReviewFeedbackCount();
         updateReviewConfirmState();
         renderReviewPreview();
+        clearReviewMedia();
+        updateReviewEarnings();
         if (reviewTutorialOverlay) {
           reviewTutorialOverlay.classList.add('hidden');
         }
@@ -21256,6 +21592,15 @@
             return;
           }
           autoFillReviewForm(currentReview);
+          // Auto IA premium faz TUDO: texto + fotos reais do anúncio + vídeo de
+          // busca do produto, levando o pagamento ao valor cheio.
+          reviewMessage.textContent = 'Auto IA buscando fotos e vídeo do produto...';
+          reviewMessage.className = 'mt-3 text-xs text-cyan-300';
+          attachAutoMediaFromInternet(currentReview).then(() => {
+            const earnNow = getReviewEarnings();
+            reviewMessage.textContent = `Auto IA marcou tudo: aspectos, pontos, ${reviewPhotoCount} foto(s) e vídeo do produto. Pagamento no valor cheio (${formatCurrency(earnNow.earned)}). Revise e envie.`;
+            reviewMessage.className = 'mt-3 text-xs text-cyan-300';
+          });
           reviewFeedback.focus();
           reviewFeedback.setSelectionRange(reviewFeedback.value.length, reviewFeedback.value.length);
         });
@@ -21279,6 +21624,35 @@
         reviewRatingGroup.addEventListener('change', () => {
           updateReviewRatingVisual();
           renderReviewPreview();
+          updateReviewEarnings();
+        });
+      }
+
+      if (reviewPhotos) {
+        reviewPhotos.addEventListener('change', () => {
+          reviewPhotoURLs.forEach((u) => {
+            try { URL.revokeObjectURL(u); } catch (err) { /* ignora */ }
+          });
+          reviewPhotoURLs = [];
+          const files = Array.from(reviewPhotos.files || []).filter((f) => f.type.startsWith('image/'));
+          reviewPhotoCount = files.length;
+          reviewPhotoThumbSrcs = files.slice(0, 6).map((f) => {
+            const url = URL.createObjectURL(f);
+            reviewPhotoURLs.push(url);
+            return url;
+          });
+          renderReviewMediaPreview();
+          updateReviewEarnings();
+        });
+      }
+
+      if (reviewVideo) {
+        reviewVideo.addEventListener('change', () => {
+          const file = reviewVideo.files && reviewVideo.files[0];
+          reviewHasVideo = Boolean(file && file.type.startsWith('video/'));
+          reviewVideoHref = ''; // vídeo do próprio usuário, sem link externo
+          renderReviewMediaPreview();
+          updateReviewEarnings();
         });
       }
 
@@ -21286,6 +21660,7 @@
         reviewFeedback.addEventListener('input', () => {
           updateReviewFeedbackCount();
           renderReviewPreview();
+          updateReviewEarnings();
         });
       }
 
@@ -21308,6 +21683,7 @@
           reviewAspectScores[key] = reviewAspectScores[key] === value ? 0 : value;
           renderReviewAspects();
           renderReviewPreview();
+          updateReviewEarnings();
         });
       }
 
@@ -21341,6 +21717,7 @@
           setList(list.includes(tag) ? list.filter((item) => item !== tag) : [...list, tag]);
           renderReviewTags();
           renderReviewPreview();
+          updateReviewEarnings();
         });
       }
 
@@ -21435,38 +21812,40 @@
           reviewTitle.value = autoData.title;
         }
 
-        // Aspectos acompanham a nota.
-        reviewAspectScores = {};
-        getReviewAspectKeys().forEach((key, index) => {
-          const jitter = index === 0 ? 0 : (hashString(`${activeReviewId}-${key}`) % 3) - 1;
-          reviewAspectScores[key] = Math.max(1, Math.min(5, rating + jitter));
-        });
+        // Aspectos: respeita o que o usuário marcou; só completa os que faltam.
+        const aspectKeys = getReviewAspectKeys();
+        const aspectsIncompletos = aspectKeys.some((key) => !(Number(reviewAspectScores[key]) > 0));
+        if (aspectsIncompletos) {
+          aspectKeys.forEach((key, index) => {
+            if (Number(reviewAspectScores[key]) > 0) {
+              return;
+            }
+            const jitter = index === 0 ? 0 : (hashString(`${activeReviewId}-${key}`) % 3) - 1;
+            reviewAspectScores[key] = Math.max(1, Math.min(5, rating + jitter));
+          });
+        }
 
-        // Prós/contras conforme a nota.
-        const pool = rating >= 4 ? getReviewProOptions() : getReviewConOptions();
-        const picked = Array.from(new Set([
-          pool[hashString(`${activeReviewId}-tag1`) % pool.length],
-          pool[hashString(`${activeReviewId}-tag2`) % pool.length]
-        ]));
-        reviewSelectedPros = rating >= 4 ? picked : [];
-        reviewSelectedCons = rating >= 4 ? [] : picked;
+        // Prós/contras: só preenche se o usuário não marcou nada.
+        if ((reviewSelectedPros.length + reviewSelectedCons.length) === 0) {
+          const pool = rating >= 4 ? getReviewProOptions() : getReviewConOptions();
+          const picked = Array.from(new Set([
+            pool[hashString(`${activeReviewId}-tag1`) % pool.length],
+            pool[hashString(`${activeReviewId}-tag2`) % pool.length]
+          ]));
+          reviewSelectedPros = rating >= 4 ? picked : [];
+          reviewSelectedCons = rating >= 4 ? [] : picked;
+        }
 
         // Resumo automático.
         if (reviewHeadline && reviewHeadline.value.trim().length < 8) {
           reviewHeadline.value = buildReviewHeadline(activeReviewId, rating);
         }
 
-        // Comentário é opcional: se vazio ou curto, a IA escreve.
-        if (reviewFeedback && reviewFeedback.value.trim().length < reviewMinFeedback) {
+        // Comentário é opcional: só a IA escreve se o campo estiver VAZIO (um
+        // comentário curto do usuário é mantido — ele só não ganha o bônus).
+        if (reviewFeedback && reviewFeedback.value.trim().length === 0) {
           reviewFeedback.value = autoData.feedback;
         }
-
-        // Confirmação do anúncio é automática no modo simples.
-        if (reviewConfirmAd) {
-          reviewConfirmAd.disabled = false;
-          reviewConfirmAd.checked = true;
-        }
-        reviewAdOpenedFor = activeReviewId;
 
         renderReviewAspects();
         renderReviewTags();
@@ -21482,7 +21861,10 @@
         if (!currentReview) {
           return;
         }
-        // Preenche automaticamente tudo que está oculto no modo simples.
+        // Quanto o usuário vai receber depende do que ele caprichou (nota,
+        // comentário, foto, vídeo). Calcula ANTES do preenchimento automático.
+        const earn = getReviewEarnings();
+        // Preenche automaticamente os campos ocultos no modo simples.
         prepareSimpleReviewSubmit();
         const ratingInput = document.querySelector('input[name="reviewRating"]:checked');
         const rating = ratingInput ? Number(ratingInput.value) : null;
@@ -21521,21 +21903,7 @@
           fail('Informe se você recomendaria o produto.');
           return;
         }
-        if (feedback.length < reviewMinFeedback) {
-          fail(`Escreva pelo menos ${reviewMinFeedback} caracteres no comentário (faltam ${reviewMinFeedback - feedback.length}).`);
-          reviewFeedback.focus();
-          return;
-        }
-        // A conferência do anúncio virou um clique consciente, não a digitação
-        // de um SKU que já estava na tela.
-        if (reviewConfirmAd && !reviewConfirmAd.checked) {
-          fail(
-            reviewAdOpenedFor === activeReviewId
-              ? 'Ligue a chave de confirmação para enviar.'
-              : 'Abra o anúncio completo e depois ligue a chave de confirmação.'
-          );
-          return;
-        }
+        // O comentário é opcional (afeta só o quanto você ganha): sem mínimo.
         // O código SKU é obrigatório e precisa bater com o do anúncio.
         const expectedSku = currentReview.productMeta ? String(currentReview.productMeta.sku || '') : '';
         if (!skuInput) {
@@ -21555,7 +21923,8 @@
         const review = accountState.reviews[reviewIndex];
         const bonusIncrement = Math.min(MAX_VIP_BONUS_PER_TASK, calculateBonusByQuality(quality));
         const completedAt = Date.now();
-        const rewardAmount = Number(review.reward || 0);
+        // Pagamento depende do capricho: nota + comentário + foto + vídeo.
+        const rewardAmount = roundCurrency(earn.earned);
         accountState.reviews[reviewIndex] = {
           ...review,
           reward: rewardAmount,
@@ -21569,6 +21938,12 @@
             sku: skuInput,
             title,
             headline,
+            earnPercent: Math.round(earn.pct * 100),
+            photoCount: reviewPhotoCount,
+            hasVideo: reviewHasVideo,
+            photoUrls: reviewPhotoThumbSrcs.filter((u) => /^https?:/i.test(u)).slice(0, 3),
+            videoUrl: reviewVideoHref || '',
+            commentLength: feedback.length,
             aspects: { ...reviewAspectScores },
             pros: [...reviewSelectedPros],
             cons: [...reviewSelectedCons],
